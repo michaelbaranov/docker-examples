@@ -3,19 +3,17 @@ variable "kubernetes_version" {
 }
 
 variable "location" {
+  type = string
   default = "northeurope"
 }
 
 variable "deployment_prefix" {
+  type = string
 }
 
-variable "log_analytics_workspace"{
-  type = object({
-    sku = string
-  })
-  default = ({
-    sku = "PerGB2018"
-  })
+variable "log_analytics_workspace_sku"{
+  type = string
+  default = "PerGB2018"
 }
 
 variable "default_node_pool" {
@@ -25,13 +23,13 @@ variable "default_node_pool" {
   })
   default = {
     agent_count = 1 
-    size = "Standard_D2_v2"
+    size = "Standard_D2_v3"
   }
 }
 
 variable additional_node_pool {
   default = {
       node_count = 1
-      size = "Standard_D4_v2"
+      size = "Standard_D2_v3"
     }
 }  
