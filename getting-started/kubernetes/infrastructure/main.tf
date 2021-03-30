@@ -62,7 +62,7 @@ resource "azurerm_log_analytics_workspace" "la" {
     name                = "${var.deployment_prefix}-la-ws-${random_id.log_analytics_workspace_name_suffix.dec}"
     location            = azurerm_resource_group.rg.location
     resource_group_name = azurerm_resource_group.rg.name
-    sku                 = var.log_analytics_workspace.sku
+    sku                 = var.log_analytics_workspace_sku
 }
 
 resource "azurerm_log_analytics_solution" "la" {
@@ -113,7 +113,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
 }
 
 resource "azurerm_kubernetes_cluster_node_pool" "node_pools" {
-    for_each = var.additional_node_pool
     kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
     name                  = "win"
     vm_size               = var.additional_node_pool.size
