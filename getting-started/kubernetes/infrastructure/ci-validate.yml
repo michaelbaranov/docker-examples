@@ -7,7 +7,7 @@ trigger:
 - none
 
 stages: 
-- stage: Prepare agent
+- stage: PrepareAgent
   jobs:
     - job: InstallTerraform
       steps:
