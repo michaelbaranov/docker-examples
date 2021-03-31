@@ -4,7 +4,12 @@
 # https://aka.ms/yaml
 
 trigger:
-- none
+  branches:
+    exclude:
+      - master
+  paths:
+    include:
+    - getting-started/kubernetes/infrastructure
 
 stages: 
 - stage: PrepareAgent
@@ -15,6 +20,21 @@ stages:
         inputs:
           terraformVersion: '0.14.5'
       - script: terraform version
+    - job: Init
+      steps:
+      - task: TerraformTaskV1@0
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: 'getting-started/kubernetes/infrastructure'
+          backendAzureRmResourceGroupName: '$(resourceGroup)'
+          backendAzureRmStorageAccountName: '$(storageAccount)'
+          backendAzureRmContainerName: '$(containerName)'
+          backendAzureRmKey: '$(stateFileName)'
+
+- stage: Validate
+  jobs:
+    - job: 
 pool:
   vmImage: ubuntu-latest
 
