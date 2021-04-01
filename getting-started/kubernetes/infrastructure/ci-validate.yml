@@ -25,7 +25,7 @@ stages:
           $rg = az group list --query "[?name=='${{ variables.resourceGroup }}']" | ConvertFrom-Json
           if ($rg.Length -eq 0){
               Write-Output "Creating resource group ${{ variables.resourceGroup }}"
-              az group create --name ${{ variables.resourceGroup }} --location ${{ location.container }}
+              az group create --name ${{ variables.resourceGroup }} --location ${{ variables.location }}
           }
   - job: CreateStorageAccount
     steps:
@@ -38,7 +38,7 @@ stages:
           $storage = az storage account list --query "[?name=='${{ variables.storageAccount }}']" | ConvertFrom-Json
           if ($storage.Length -eq 0){
               Write-Output "Creating storage account ${{ variables.storageAccount }}"
-              az storage account create --name ${{ variables.storageAccount }} --resource-group ${{ variables.resourceGroup }} --location ${{ location.container }} --sku 'Standard_LRS'
+              az storage account create --name ${{ variables.storageAccount }} --resource-group ${{ variables.resourceGroup }} --location ${{ variables.location }} --sku 'Standard_LRS'
           }
   - job: CreateContainer
     steps:
