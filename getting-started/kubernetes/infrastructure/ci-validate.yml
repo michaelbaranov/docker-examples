@@ -12,7 +12,51 @@ trigger:
     - getting-started/kubernetes/infrastructure
 
 stages: 
-- stage: PrepareAgent
+- stage: PrepeareInfrastructure
+  jobs:
+  - job: CreateResourceGroup
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'DockerExamplesAzureConnection'
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $rg = az group list --query "[?name=='$resourceGroup']" | ConvertFrom-Json
+          if ($rg.Length -eq 0){
+              Write-Output "Creating resource group $resourceGroup"
+              az group create --name $resourceGroup --location $location
+          }
+  - job: CreateStorageAccount
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'DockerExamplesAzureConnection'
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $storage = az storage account list --query "[?name=='$storageAccount']" | ConvertFrom-Json
+          if ($storage.Length -eq 0){
+              Write-Output "Creating storage account $storageAccount"
+              az storage account create --name $storageAccount --resource-group $resourceGroup --location $location --sku 'Standard_LRS'
+          }
+  - job: CreateContainer
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'DockerExamplesAzureConnection'
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $accountKey=$(az storage account keys list --resource-group $resourceGroup --account-name $storageAccount --query [0].value -o tsv)
+          
+          $container = az storage container list --account-name $storageAccount --account-key $accountKey --query "[?name=='$container']" | ConvertFrom-Json
+          if ($container.Length -eq 0)
+          {
+              Write-Output "Creating container $container"
+              az storage container create --name $container --account-name $storageAccount --account-key $accountKey
+          }
+- stage: PrepeareAgent
   jobs:
     - job: InstallTerraform
       steps:
@@ -29,12 +73,9 @@ stages:
           workingDirectory: 'getting-started/kubernetes/infrastructure'
           backendAzureRmResourceGroupName: '$(resourceGroup)'
           backendAzureRmStorageAccountName: '$(storageAccount)'
-          backendAzureRmContainerName: '$(containerName)'
+          backendAzureRmContainerName: '$(container)'
           backendAzureRmKey: '$(stateFileName)'
 
-- stage: Validate
-  jobs:
-    - job: 
 pool:
   vmImage: ubuntu-latest
 
