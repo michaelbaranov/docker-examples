@@ -19,7 +19,7 @@ stages:
     - task: AzureCLI@2
       inputs:
         azureSubscription: 'DockerExamplesAzureConnection'
-        scriptType: 'ps'
+        scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
           $rg = az group list --query "[?name=='$resourceGroup']" | ConvertFrom-Json
@@ -32,7 +32,7 @@ stages:
     - task: AzureCLI@2
       inputs:
         azureSubscription: 'DockerExamplesAzureConnection'
-        scriptType: 'ps'
+        scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
           $storage = az storage account list --query "[?name=='$storageAccount']" | ConvertFrom-Json
@@ -45,7 +45,7 @@ stages:
     - task: AzureCLI@2
       inputs:
         azureSubscription: 'DockerExamplesAzureConnection'
-        scriptType: 'ps'
+        scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
           $accountKey=$(az storage account keys list --resource-group $resourceGroup --account-name $storageAccount --query [0].value -o tsv)
