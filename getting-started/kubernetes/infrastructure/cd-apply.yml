@@ -59,7 +59,7 @@ stages:
             provider: 'azurerm'
             command: 'apply'
             workingDirectory: 'getting-started/kubernetes/infrastructure'
-            commandOptions: 'tfplan -auto-approve'
+            commandOptions: '-auto-approve tfplan'
             environmentServiceNameAzureRM: 'DockerExamplesAzureConnection'
 
 pool:
