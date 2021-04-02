@@ -4,7 +4,6 @@ variable "kubernetes_version" {
 
 variable "location" {
   type = string
-  default = "northeurope"
 }
 
 variable "deployment_prefix" {
