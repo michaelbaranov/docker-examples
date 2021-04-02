@@ -22,7 +22,7 @@ stages:
       - task: TerraformInstaller@0
         displayName: Install Terraform 
         inputs:
-          terraformVersion: '0.14.5'
+          terraformVersion: '0.14.9'
       - script: terraform version
 - stage: RunDeployment
   jobs:
@@ -51,7 +51,7 @@ stages:
             provider: 'azurerm'
             command: 'plan'
             workingDirectory: 'getting-started/kubernetes/infrastructure'
-            commandOptions: '-out=tfplan'
+            commandOptions: '-out=tfplan -var deployment_prefix=$(DeploymentPrefix) -var location=$(Location)'
             environmentServiceNameAzureRM: 'DockerExamplesAzureConnection'
         - task: TerraformTaskV1@0
           displayName: 'Apply infrastructure changes'
@@ -59,7 +59,7 @@ stages:
             provider: 'azurerm'
             command: 'apply'
             workingDirectory: 'getting-started/kubernetes/infrastructure'
-            commandOptions: 'tfplan'
+            commandOptions: '-auto-approve tfplan'
             environmentServiceNameAzureRM: 'DockerExamplesAzureConnection'
 
 pool:
