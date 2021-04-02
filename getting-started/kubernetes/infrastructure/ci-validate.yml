@@ -25,10 +25,10 @@ stages:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          $rg = az group list --query "[?name=='$env:ResourceGroup']" | ConvertFrom-Json
+          $rg = az group list --query "[?name=='$env:RESOURCEGROUP']" | ConvertFrom-Json
           if ($rg.Length -eq 0){
-              Write-Output "Creating resource group $env:ResourceGroup"
-              az group create --name  $env:ResourceGroup  --location $env:Location
+              Write-Output "Creating resource group $env:RESOURCEGROUP"
+              az group create --name $env:RESOURCEGROUP --location $env:LOCATION
           }
   - job: CreateStorageAccount
     steps:
@@ -38,10 +38,10 @@ stages:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          $storage = az storage account list --query "[?name=='$env:StorageAccount']" | ConvertFrom-Json
+          $storage = az storage account list --query "[?name=='$env:STORAGEACCOUNT']" | ConvertFrom-Json
           if ($storage.Length -eq 0){
-              Write-Output "Creating storage account $env:StorageAccount"
-              az storage account create --name  $env:StorageAccount --resource-group $env:ResourceGroup  --location $env:Location --sku 'Standard_LRS'
+              Write-Output "Creating storage account $env:STORAGEACCOUNT"
+              az storage account create --name $env:STORAGEACCOUNT --resource-group $env:RESOURCEGROUP --location $env:LOCATION --sku 'Standard_LRS'
           }
   - job: CreateContainer
     steps:
@@ -51,13 +51,13 @@ stages:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          $accountKey=$(az storage account keys list --resource-group $env:ResourceGroup --account-name $env:StorageAccount --query [0].value -o tsv)
+          $accountKey=$(az storage account keys list --resource-group $env:RESOURCEGROUP --account-name $env:STORAGEACCOUNT --query [0].value -o tsv)
           
-           $env:Container = az storage container list --account-name $env:StorageAccount --account-key $accountKey --query "[?name=='$env:Container']" | ConvertFrom-Json
-          if ( $env:Container.Length -eq 0)
+           $container = az storage container list --account-name $env:STORAGEACCOUNT --account-key $accountKey --query "[?name=='$env:CONTAINER']" | ConvertFrom-Json
+          if ( $container.Length -eq 0)
           {
-              Write-Output "Creating container  $env:Container"
-              az storage container create --name $env:Container --account-name $env:StorageAccount --account-key $accountKey
+              Write-Output "Creating container  $env:CONTAINER"
+              az storage container create --name $env:CONTAINER --account-name $env:STORAGEACCOUNT --account-key $accountKey
           }
 - stage: PrepeareAgent
   jobs:
