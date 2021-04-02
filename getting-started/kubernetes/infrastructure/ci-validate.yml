@@ -63,21 +63,44 @@ stages:
     - job: InstallTerraform
       steps:
       - task: TerraformInstaller@0
+        displayName: Install Terraform 
         inputs:
           terraformVersion: '0.14.5'
       - script: terraform version
-    - job: Init
-      steps:
       - task: TerraformTaskV1@0
+        displayName: Terraform Init
         inputs:
           provider: 'azurerm'
           command: 'init'
           workingDirectory: 'getting-started/kubernetes/infrastructure'
-          backendAzureRmResourceGroupName: $(ResourceGroup)
-          backendAzureRmStorageAccountName: $(StorageAccount)
-          backendAzureRmContainerName: $(ContainerName)
-          backendAzureRmKey: $(StateFileName)
-
+          backendServiceArm: 'DockerExamplesAzureConnection'
+          backendAzureRmResourceGroupName: '$(ResourceGroup)'
+          backendAzureRmStorageAccountName: '$(StorageAccount)'
+          backendAzureRmContainerName: '$(ContainerName)'
+          backendAzureRmKey: '$(StateFileName)'
+- stage: Run integration
+  jobs:
+    - job: ValidateAndPlan
+      steps:
+        - task: TerraformTaskV1@0
+          displayName: 'Validate template'
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+            workingDirectory: 'getting-started/kubernetes/infrastructure'
+        - task: TerraformTaskV1@0
+          displayName: 'Build plan'
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            commandOptions: '-out=tfplan'
+            environmentServiceNameAzureRM: 'DockerExamplesAzureConnection'
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish plan'
+          inputs:
+            PathtoPublish: 'getting-started/kubernetes/infrastructure/tfplan'
+            ArtifactName: 'tfplan'
+            publishLocation: 'Container'
 pool:
   vmImage: ubuntu-latest
 
