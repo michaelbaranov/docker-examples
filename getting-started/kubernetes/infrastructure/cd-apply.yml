@@ -22,7 +22,7 @@ stages:
       - task: TerraformInstaller@0
         displayName: Install Terraform 
         inputs:
-          terraformVersion: '0.14.5'
+          terraformVersion: '0.14.9'
       - script: terraform version
 - stage: RunDeployment
   jobs:
