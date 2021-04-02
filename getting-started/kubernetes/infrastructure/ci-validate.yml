@@ -67,21 +67,21 @@ stages:
         inputs:
           terraformVersion: '0.14.5'
       - script: terraform version
-      - task: TerraformTaskV1@0
-        displayName: Terraform Init
-        inputs:
-          provider: 'azurerm'
-          command: 'init'
-          workingDirectory: 'getting-started/kubernetes/infrastructure'
-          backendServiceArm: 'DockerExamplesAzureConnection'
-          backendAzureRmResourceGroupName: '$(ResourceGroup)'
-          backendAzureRmStorageAccountName: '$(StorageAccount)'
-          backendAzureRmContainerName: '$(ContainerName)'
-          backendAzureRmKey: '$(StateFileName)'
 - stage: RunIntegration
   jobs:
     - job: ValidateAndPlan
       steps:
+        - task: TerraformTaskV1@0
+          displayName: Terraform Init
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: 'getting-started/kubernetes/infrastructure'
+            backendServiceArm: 'DockerExamplesAzureConnection'
+            backendAzureRmResourceGroupName: '$(ResourceGroup)'
+            backendAzureRmStorageAccountName: '$(StorageAccount)'
+            backendAzureRmContainerName: '$(ContainerName)'
+            backendAzureRmKey: '$(StateFileName)'
         - task: TerraformTaskV1@0
           displayName: 'Validate template'
           inputs:
