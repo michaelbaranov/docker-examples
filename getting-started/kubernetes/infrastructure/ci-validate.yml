@@ -17,7 +17,7 @@ variables:
 stages: 
 - stage: PrepeareInfrastructure
   jobs:
-  - job: CreateResourceGroup
+  - job: CreateStorageAccoutn
     steps:
     - task: AzureCLI@2
       inputs:
@@ -30,8 +30,6 @@ stages:
               Write-Output "Creating resource group $env:RESOURCEGROUP"
               az group create --name $env:RESOURCEGROUP --location $env:LOCATION
           }
-  - job: CreateStorageAccount
-    steps:
     - task: AzureCLI@2
       inputs:
         azureSubscription: 'DockerExamplesAzureConnection'
@@ -43,8 +41,6 @@ stages:
               Write-Output "Creating storage account $env:STORAGEACCOUNT"
               az storage account create --name $env:STORAGEACCOUNT --resource-group $env:RESOURCEGROUP --location $env:LOCATION --sku 'Standard_LRS'
           }
-  - job: CreateContainer
-    steps:
     - task: AzureCLI@2
       inputs:
         azureSubscription: 'DockerExamplesAzureConnection'
