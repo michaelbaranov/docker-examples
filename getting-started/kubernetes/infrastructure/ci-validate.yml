@@ -4,17 +4,104 @@
 # https://aka.ms/yaml
 
 trigger:
-- none
+  branches:
+    exclude:
+      - master
+  paths:
+    include:
+    - getting-started/kubernetes/infrastructure
+
+variables:
+- group: Infrastructure
 
 stages: 
-- stage: PrepareAgent
+- stage: PrepeareInfrastructure
+  jobs:
+  - job: CreateStorageAccount
+    steps:
+    - task: AzureCLI@2
+      displayName: "Create resource group"
+      inputs:
+        azureSubscription: 'DockerExamplesAzureConnection'
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $rg = az group list --query "[?name=='$env:RESOURCEGROUP']" | ConvertFrom-Json
+          if ($rg.Length -eq 0){
+              Write-Output "Creating resource group $env:RESOURCEGROUP"
+              az group create --name $env:RESOURCEGROUP --location $env:LOCATION
+          }
+    - task: AzureCLI@2
+      displayName: "Create storage account"
+      inputs:
+        azureSubscription: 'DockerExamplesAzureConnection'
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $storage = az storage account list --query "[?name=='$env:STORAGEACCOUNT']" | ConvertFrom-Json
+          if ($storage.Length -eq 0){
+              Write-Output "Creating storage account $env:STORAGEACCOUNT"
+              az storage account create --name $env:STORAGEACCOUNT --resource-group $env:RESOURCEGROUP --location $env:LOCATION --sku 'Standard_LRS'
+          }
+    - task: AzureCLI@2
+      displayName: "Create container"
+      inputs:
+        azureSubscription: 'DockerExamplesAzureConnection'
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $accountKey=$(az storage account keys list --resource-group $env:RESOURCEGROUP --account-name $env:STORAGEACCOUNT --query [0].value -o tsv)
+          
+           $container = az storage container list --account-name $env:STORAGEACCOUNT --account-key $accountKey --query "[?name=='$env:CONTAINERNAME']" | ConvertFrom-Json
+          if ( $container.Length -eq 0)
+          {
+              Write-Output "Creating container  $env:CONTAINERNAME"
+              az storage container create --name $env:CONTAINERNAME --account-name $env:STORAGEACCOUNT --account-key $accountKey
+          }
+- stage: PrepeareAgent
   jobs:
     - job: InstallTerraform
       steps:
       - task: TerraformInstaller@0
+        displayName: Install Terraform 
         inputs:
           terraformVersion: '0.14.5'
       - script: terraform version
+- stage: RunIntegration
+  jobs:
+    - job: ValidateAndPlan
+      steps:
+        - task: TerraformTaskV1@0
+          displayName: Terraform Init
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: 'getting-started/kubernetes/infrastructure'
+            backendServiceArm: 'DockerExamplesAzureConnection'
+            backendAzureRmResourceGroupName: '$(ResourceGroup)'
+            backendAzureRmStorageAccountName: '$(StorageAccount)'
+            backendAzureRmContainerName: '$(ContainerName)'
+            backendAzureRmKey: '$(StateFileName)'
+        - task: TerraformTaskV1@0
+          displayName: 'Validate template'
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+            workingDirectory: 'getting-started/kubernetes/infrastructure'
+        - task: TerraformTaskV1@0
+          displayName: 'Build plan'
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: 'getting-started/kubernetes/infrastructure'
+            commandOptions: '-out=tfplan -var deployment_prefix=$(DeploymentPrefix) -var location=$(Location)'
+            environmentServiceNameAzureRM: 'DockerExamplesAzureConnection'
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish plan'
+          inputs:
+            PathtoPublish: 'getting-started/kubernetes/infrastructure/tfplan'
+            ArtifactName: 'tfplan'
+            publishLocation: 'Container'
 pool:
   vmImage: ubuntu-latest
 
