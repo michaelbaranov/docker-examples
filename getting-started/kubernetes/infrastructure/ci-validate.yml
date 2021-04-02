@@ -78,7 +78,7 @@ stages:
           backendAzureRmStorageAccountName: '$(StorageAccount)'
           backendAzureRmContainerName: '$(ContainerName)'
           backendAzureRmKey: '$(StateFileName)'
-- stage: Run integration
+- stage: RunIntegration
   jobs:
     - job: ValidateAndPlan
       steps:
