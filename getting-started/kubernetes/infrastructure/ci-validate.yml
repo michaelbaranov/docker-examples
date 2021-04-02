@@ -93,6 +93,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'plan'
+            workingDirectory: 'getting-started/kubernetes/infrastructure'
             commandOptions: '-out=tfplan'
             environmentServiceNameAzureRM: 'DockerExamplesAzureConnection'
         - task: PublishBuildArtifacts@1
