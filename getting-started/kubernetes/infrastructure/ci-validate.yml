@@ -11,6 +11,9 @@ trigger:
     include:
     - getting-started/kubernetes/infrastructure
 
+variables:
+- group: Infrastructure
+
 stages: 
 - stage: PrepeareInfrastructure
   jobs:
@@ -22,10 +25,10 @@ stages:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          $rg = az group list --query "[?name=='${{ variables.resourceGroup }}']" | ConvertFrom-Json
+          $rg = az group list --query "[?name=='$env:ResourceGroup']" | ConvertFrom-Json
           if ($rg.Length -eq 0){
-              Write-Output "Creating resource group ${{ variables.resourceGroup }}"
-              az group create --name ${{ variables.resourceGroup }} --location ${{ variables.location }}
+              Write-Output "Creating resource group $env:ResourceGroup"
+              az group create --name  $env:ResourceGroup  --location $env:Location
           }
   - job: CreateStorageAccount
     steps:
@@ -35,10 +38,10 @@ stages:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          $storage = az storage account list --query "[?name=='${{ variables.storageAccount }}']" | ConvertFrom-Json
+          $storage = az storage account list --query "[?name=='$env:StorageAccount']" | ConvertFrom-Json
           if ($storage.Length -eq 0){
-              Write-Output "Creating storage account ${{ variables.storageAccount }}"
-              az storage account create --name ${{ variables.storageAccount }} --resource-group ${{ variables.resourceGroup }} --location ${{ variables.location }} --sku 'Standard_LRS'
+              Write-Output "Creating storage account $env:StorageAccount"
+              az storage account create --name  $env:StorageAccount --resource-group $env:ResourceGroup  --location $env:Location --sku 'Standard_LRS'
           }
   - job: CreateContainer
     steps:
@@ -48,13 +51,13 @@ stages:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          $accountKey=$(az storage account keys list --resource-group ${{ variables.resourceGroup }} --account-name ${{ variables.storageAccount }} --query [0].value -o tsv)
+          $accountKey=$(az storage account keys list --resource-group $env:ResourceGroup --account-name $env:StorageAccount --query [0].value -o tsv)
           
-          ${{ variables.container }} = az storage container list --account-name ${{ variables.storageAccount }} --account-key $accountKey --query "[?name=='${{ variables.container }}']" | ConvertFrom-Json
-          if (${{ variables.container }}.Length -eq 0)
+           $env:Container = az storage container list --account-name $env:StorageAccount --account-key $accountKey --query "[?name=='$env:Container']" | ConvertFrom-Json
+          if ( $env:Container.Length -eq 0)
           {
-              Write-Output "Creating container ${{ variables.container }}"
-              az storage container create --name ${{ variables.container }} --account-name ${{ variables.storageAccount }} --account-key $accountKey
+              Write-Output "Creating container  $env:Container"
+              az storage container create --name $env:Container --account-name $env:StorageAccount --account-key $accountKey
           }
 - stage: PrepeareAgent
   jobs:
@@ -71,10 +74,10 @@ stages:
           provider: 'azurerm'
           command: 'init'
           workingDirectory: 'getting-started/kubernetes/infrastructure'
-          backendAzureRmResourceGroupName: '${{ variables.resourceGroup }}'
-          backendAzureRmStorageAccountName: '${{ variables.storageAccount }}'
-          backendAzureRmContainerName: '${{ variables.container }}'
-          backendAzureRmKey: '${{ variables.stateFileName }}'
+          backendAzureRmResourceGroupName: $(ResourceGroup)
+          backendAzureRmStorageAccountName: $(StorageAccount)
+          backendAzureRmContainerName: $(Container)
+          backendAzureRmKey: $(StateFileName)
 
 pool:
   vmImage: ubuntu-latest
