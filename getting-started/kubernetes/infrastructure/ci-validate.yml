@@ -94,7 +94,7 @@ stages:
             provider: 'azurerm'
             command: 'plan'
             workingDirectory: 'getting-started/kubernetes/infrastructure'
-            commandOptions: '-out=tfplan'
+            commandOptions: '-out=tfplan -var deployment_prefix=$(DeploymentPrefix) -var location=$(Location)'
             environmentServiceNameAzureRM: 'DockerExamplesAzureConnection'
         - task: PublishBuildArtifacts@1
           displayName: 'Publish plan'
