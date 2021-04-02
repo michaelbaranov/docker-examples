@@ -52,11 +52,11 @@ stages:
         inlineScript: |
           $accountKey=$(az storage account keys list --resource-group $env:RESOURCEGROUP --account-name $env:STORAGEACCOUNT --query [0].value -o tsv)
           
-           $container = az storage container list --account-name $env:STORAGEACCOUNT --account-key $accountKey --query "[?name=='$env:CONTAINER']" | ConvertFrom-Json
+           $container = az storage container list --account-name $env:STORAGEACCOUNT --account-key $accountKey --query "[?name=='$env:CONTAINERNAME']" | ConvertFrom-Json
           if ( $container.Length -eq 0)
           {
-              Write-Output "Creating container  $env:CONTAINER"
-              az storage container create --name $env:CONTAINER --account-name $env:STORAGEACCOUNT --account-key $accountKey
+              Write-Output "Creating container  $env:CONTAINERNAME"
+              az storage container create --name $env:CONTAINERNAME --account-name $env:STORAGEACCOUNT --account-key $accountKey
           }
 - stage: PrepeareAgent
   jobs:
@@ -75,7 +75,7 @@ stages:
           workingDirectory: 'getting-started/kubernetes/infrastructure'
           backendAzureRmResourceGroupName: $(ResourceGroup)
           backendAzureRmStorageAccountName: $(StorageAccount)
-          backendAzureRmContainerName: $(Container)
+          backendAzureRmContainerName: $(ContainerName)
           backendAzureRmKey: $(StateFileName)
 
 pool:
