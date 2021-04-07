@@ -10,6 +10,10 @@ variable "deployment_prefix" {
   type = string
 }
 
+variable "acrname" {
+  type="string"
+}
+
 variable "log_analytics_workspace_sku"{
   type = string
   default = "PerGB2018"
