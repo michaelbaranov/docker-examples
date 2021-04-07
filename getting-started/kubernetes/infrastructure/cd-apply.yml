@@ -51,7 +51,7 @@ stages:
             provider: 'azurerm'
             command: 'plan'
             workingDirectory: 'getting-started/kubernetes/infrastructure'
-            commandOptions: '-out=tfplan -var deployment_prefix=$(DeploymentPrefix) -var location=$(Location)'
+            commandOptions: '-out=tfplan -var deployment_prefix=$(DeploymentPrefix) -var location=$(Location) -var acrname=$(ACRName)'
             environmentServiceNameAzureRM: 'DockerExamplesAzureConnection'
         - task: TerraformTaskV1@0
           displayName: 'Apply infrastructure changes'
