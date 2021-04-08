@@ -1,0 +1,15 @@
+trigger:
+  - none
+
+resources:
+- repo: self
+
+variables:
+  - group: Infrastructure
+
+stages:
+- stage: Deploy
+  displayName: Deploy XM1
+
+pool:
+  vmImage: ubuntu-latest
