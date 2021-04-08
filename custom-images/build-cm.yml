@@ -35,7 +35,6 @@ stages:
         targetType: 'inline'
         script: |
           (Get-Content .env) -replace "^REGISTRY=.*$","REGISTRY=$env:ACRNAME.azurecr.io/docker-examples/" | Set-Content .env
-          (Get-Content .env) -replace "^VERSION=.*$","VERSION=$(VERSION)" | Set-Content .env
         workingDirectory: 'custom-images'
     - task: PowerShell@2
       displayName: "Run Docker Comopose build"
