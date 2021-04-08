@@ -25,10 +25,6 @@ resource "random_id" "log_analytics_workspace_name_suffix" {
     byte_length = 8
 }
 
-resource "random_id" "acr_name_suffix" {
-    byte_length = 8
-}
-
 resource "random_password" "windows_admin_password" {
   length      = 16
   min_upper   = 1
@@ -37,22 +33,7 @@ resource "random_password" "windows_admin_password" {
   special     = false
 }
 
-resource "random_password" "sql_admin_password" {
-  length      = 16
-  min_upper   = 1
-  min_lower   = 1
-  min_numeric = 1
-  special     = false
-}
-
 resource "random_password" "windows_admin_username" {
-  length    = 16
-  min_upper = 1
-  min_lower = 1
-  special   = false
-}
-
-resource "random_password" "sql_admin_username" {
   length    = 16
   min_upper = 1
   min_lower = 1
@@ -138,12 +119,12 @@ resource "azurerm_role_assignment" "aks_acr" {
 }
 
 resource "azurerm_sql_server" "sql" {
-  name                         = "${var.deployment_prefix}-sql-server"
+  name                         = var.sql-server-name
   resource_group_name          = azurerm_resource_group.rg.name
   location                     = azurerm_resource_group.rg.location
   version                      = "12.0"
-  administrator_login          = random_password.sql_admin_username.result
-  administrator_login_password = random_password.sql_admin_password.result
+  administrator_login          = "sa"
+  administrator_login_password = var.sql_admin_password
 }
 
 resource "azurerm_mssql_elasticpool" "elasticpool" {

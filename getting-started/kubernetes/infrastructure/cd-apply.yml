@@ -15,9 +15,16 @@ variables:
 - group: docker-examples-variables
 
 stages: 
-- stage: PrepeareAgent
+- stage: PrepeareEnvironment
   jobs:
     - job: InstallTerraform
+      steps:
+      - task: TerraformInstaller@0
+        displayName: Install Terraform 
+        inputs:
+          terraformVersion: '0.14.9'
+      - script: terraform version
+    - job: GenerateSecrets
       steps:
       - task: TerraformInstaller@0
         displayName: Install Terraform 
@@ -51,7 +58,7 @@ stages:
             provider: 'azurerm'
             command: 'plan'
             workingDirectory: 'getting-started/kubernetes/infrastructure'
-            commandOptions: '-out=tfplan -var deployment_prefix=$(DeploymentPrefix) -var location=$(Location) -var acrname=$(ACRName)'
+            commandOptions: '-out=tfplan -var deployment_prefix=$(DeploymentPrefix) -var location=$(Location) -var acrname=$(ACRName) -var sql-server-name=$(SQLSAPassword) -var sql_admin_password=$(SQLSAPassword)'
             environmentServiceNameAzureRM: 'DockerExamplesAzureConnection'
         - task: TerraformTaskV1@0
           displayName: 'Apply infrastructure changes'
