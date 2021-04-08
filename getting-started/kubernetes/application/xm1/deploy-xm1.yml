@@ -5,7 +5,7 @@ resources:
 - repo: self
 
 variables:
-  - group: Infrastructure
+  - group: docker-examples-variables
 
 stages:
 - stage: Configure Agent
