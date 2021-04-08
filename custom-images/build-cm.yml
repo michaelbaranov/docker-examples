@@ -32,7 +32,22 @@ stages:
           az configure --defaults acr=$env:ACRNAME
           az acr login
     - task: PowerShell@2
+      displayName: "Prepeare .env file"
+      inputs:
+        targetType: 'inline'
+        script: |
+          (Get-Content .env) -replace "REGISTRY=.*$","REGISTRY=$env:ACRNAME.azurecr.io" | Set-Content .env
+          (Get-Content .env) -replace "VERSION=.*$","VERSION=$(VERSION)" | Set-Content .env
+        workingDirectory: 'custom-images'
+    - task: PowerShell@2
+      displayName: "Run Docker Comopose build"
       inputs:
         targetType: 'inline'
         script: 'docker-compose -f .\docker-compose.xm1.yml -f .\docker-compose.xm1.override.yml build --build-arg REGISTRY="$env:ACRNAME.azurecr.io" --build-arg VERSION=$(VERSION)'
+        workingDirectory: 'custom-images'
+    - task: PowerShell@2
+      displayName: "Push images"
+      inputs:
+        targetType: 'inline'
+        script: 'docker-compose push'
         workingDirectory: 'custom-images'
