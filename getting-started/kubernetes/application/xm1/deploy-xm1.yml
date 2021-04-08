@@ -16,8 +16,7 @@ stages:
         displayName: "Install Kustomize"
         inputs:
           script: |
-            sudo apt-get update
-            sudo apt-get install kustomize
+            snap install kustomize
       - task: AzureCLI@2
         displayName: "Configure kubectl"
         inputs:
