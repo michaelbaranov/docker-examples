@@ -1,7 +1,5 @@
 trigger:
-  - main
-  - feature/*
-  - release/*
+  - none
 
 resources:
 - repo: self
