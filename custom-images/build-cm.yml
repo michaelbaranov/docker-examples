@@ -49,5 +49,5 @@ stages:
       displayName: "Push images"
       inputs:
         targetType: 'inline'
-        script: 'docker-compose push'
+        script: 'docker-compose -f .\docker-compose.xm1.yml -f .\docker-compose.xm1.override.yml push'
         workingDirectory: 'custom-images'
