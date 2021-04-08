@@ -1,0 +1,36 @@
+trigger:
+  - none
+
+resources:
+- repo: self
+
+variables:
+  - group: Infrastructure
+  - name: version
+    value: '$(Build.BuildId)'
+  - name: vmImageName
+    value: 'windows-2019'
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: AzureCLI@2
+      displayName: "Az login, set ACR"
+      inputs:
+        azureSubscription: 'DockerExamplesAzureConnection'
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az configure --defaults acr=$env:ACRNAME
+          az acr login
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: 'docker-compose -f .\docker-compose.xm1.yml -f .\docker-compose.xm1.override.yml build --build-arg REGISTRY=$($env:ACRNAME).azurecr.io --build-arg VERSION=$(VERSION)'
+        workingDirectory: 'custom-images'

@@ -12,7 +12,7 @@ trigger:
     - getting-started/kubernetes/infrastructure
 
 variables:
-- group: Infrastructure
+- group: docker-examples-variables
 
 stages: 
 - stage: PrepeareAgent
