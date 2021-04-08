@@ -43,7 +43,7 @@ stages:
       displayName: "Run Docker Comopose build"
       inputs:
         targetType: 'inline'
-        script: 'docker-compose -f .\docker-compose.xm1.yml -f .\docker-compose.xm1.override.yml build --build-arg REGISTRY="$env:ACRNAME.azurecr.io" --build-arg VERSION=$(VERSION)'
+        script: 'docker-compose -f .\docker-compose.xm1.yml -f .\docker-compose.xm1.override.yml build'
         workingDirectory: 'custom-images'
     - task: PowerShell@2
       displayName: "Push images"
