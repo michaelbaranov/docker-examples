@@ -61,10 +61,10 @@ resource "azurerm_log_analytics_solution" "la" {
 }
 
 resource "azurerm_kubernetes_cluster" "aks" {
-    name                = "${var.deployment_prefix}-aks"
+    name                = var.aks-name
     location            = azurerm_resource_group.rg.location
     resource_group_name = azurerm_resource_group.rg.name
-    dns_prefix          = "${var.deployment_prefix}-aks"
+    dns_prefix          = var.aks-name
 
     default_node_pool {
         name            = "default"

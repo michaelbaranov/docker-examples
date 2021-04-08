@@ -44,3 +44,7 @@ variable "sql_admin_password" {
 variable "sql-server-name" {
   type = string
 }
+
+variable "aks-name" {
+  type = string
+}
