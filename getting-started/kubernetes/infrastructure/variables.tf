@@ -36,3 +36,11 @@ variable additional_node_pool {
       size = "Standard_D2_v3"
     }
 }  
+
+variable "sql_admin_password" {
+  type = string  
+}
+
+variable "sql-server-name" {
+  type = string
+}
