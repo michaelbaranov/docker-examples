@@ -15,15 +15,6 @@ variables:
 - group: docker-examples-variables
 
 stages: 
-- stage: PrepeareEnvironment
-  jobs:
-    - job: InstallTerraform
-      steps:
-      - task: TerraformInstaller@0
-        displayName: Install Terraform 
-        inputs:
-          terraformVersion: '0.14.9'
-      - script: terraform version
 - stage: RunDeployment
   jobs:
     - job: PlanAndApply
@@ -61,6 +52,19 @@ stages:
             workingDirectory: 'getting-started/kubernetes/infrastructure'
             commandOptions: '-auto-approve tfplan'
             environmentServiceNameAzureRM: 'DockerExamplesAzureConnection'
-
+- stage: ConfigureEnvironment
+  jobs:
+    - job: Installnginx
+      steps:
+      - task: HelmDeploy@0
+        inputs:
+          connectionType: 'Azure Resource Manager'
+          azureSubscription: 'DockerExamplesAzureConnection'
+          azureResourceGroup: '$(ResourceGroup)'
+          kubernetesCluster: $(AKSName)
+          command: 'install'
+          chartType: 'Name'
+          chartName: 'nginx-ingress'
+          arguments: '--set controller.replicaCount=2 --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux --set controller.admissionWebhooks.patch.nodeSelector."beta\.kubernetes\.io/os"=linux --set-string controller.config.proxy-body-size=10m'
 pool:
   vmImage: ubuntu-latest
