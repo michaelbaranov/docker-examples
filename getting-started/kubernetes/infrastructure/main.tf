@@ -17,7 +17,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "${var.deployment_prefix}-aks"
+  name     = var.resourceGroupName
   location = var.location
 }
 

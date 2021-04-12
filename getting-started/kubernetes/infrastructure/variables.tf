@@ -48,3 +48,7 @@ variable "sql-server-name" {
 variable "aks-name" {
   type = string
 }
+
+variable "resourceGroupName" {
+  type = string
+}
