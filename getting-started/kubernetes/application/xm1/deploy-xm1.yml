@@ -5,11 +5,28 @@ resources:
 - repo: self
 
 variables:
-  - group: Infrastructure
+  - group: docker-examples-variables
 
 stages:
-- stage: Deploy
-  displayName: Deploy XM1
+- stage: PrepeareAgent
+  jobs:
+    - job: Configure
+      steps:
+      - task: CmdLine@2
+        displayName: "Install Kustomize"
+        inputs:
+          script: |
+            sudo snap install kustomize
+      - task: AzureCLI@2
+        displayName: "Configure kubectl"
+        inputs:
+          azureSubscription: 'DockerExamplesAzureConnection'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: 'az aks get-credentials --name $(AKSName) --resource-group $(ResourceGroup) --admin'
+
+# - stage: Deploy
+#   displayName: Deploy XM1
 
 pool:
   vmImage: ubuntu-latest
