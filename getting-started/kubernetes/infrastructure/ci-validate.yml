@@ -94,7 +94,7 @@ stages:
             provider: 'azurerm'
             command: 'plan'
             workingDirectory: 'getting-started/kubernetes/infrastructure'
-            commandOptions: '-out=tfplan -var deployment_prefix=$(DeploymentPrefix) -var location=$(Location) -var acrname=$(ACRName) -var sql-server-name=$(SQLServerName) -var sql_admin_password=$(SQLSAPassword) -var aks-name=$(AKSName)'
+            commandOptions: '-out=tfplan -var deployment_prefix=$(DeploymentPrefix) -var location=$(Location) -var acrname=$(ACRName) -var sql-server-name=$(SQLServerName) -var sql_admin_password=$(SQLSAPassword) -var aks-name=$(AKSName) -var resourceGroupName=$(ResourceGroupName)'
             environmentServiceNameAzureRM: 'DockerExamplesAzureConnection'
         - task: PublishBuildArtifacts@1
           displayName: 'Publish plan'
