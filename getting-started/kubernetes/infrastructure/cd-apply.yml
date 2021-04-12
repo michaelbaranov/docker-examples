@@ -56,7 +56,16 @@ stages:
   jobs:
     - job: Installnginx
       steps:
+      - task: AzureCLI@2
+        displayName: "Add nginx repo"
+        inputs:
+          azureSubscription: 'DockerExamplesAzureConnection'
+          scriptType: 'pscore'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
       - task: HelmDeploy@0
+        displayName: "Install nginx"
         inputs:
           connectionType: 'Azure Resource Manager'
           azureSubscription: 'DockerExamplesAzureConnection'
@@ -64,7 +73,7 @@ stages:
           kubernetesCluster: $(AKSName)
           command: 'install'
           chartType: 'Name'
-          chartName: 'nginx-ingress'
+          chartName: 'nginx-ingress ingress-nginx/ingress-nginx'
           arguments: '--set controller.replicaCount=2 --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux --set controller.admissionWebhooks.patch.nodeSelector."beta\.kubernetes\.io/os"=linux --set-string controller.config.proxy-body-size=10m'
 pool:
   vmImage: ubuntu-latest
