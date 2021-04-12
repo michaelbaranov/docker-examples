@@ -24,13 +24,6 @@ stages:
         inputs:
           terraformVersion: '0.14.9'
       - script: terraform version
-    - job: GenerateSecrets
-      steps:
-      - task: TerraformInstaller@0
-        displayName: Install Terraform 
-        inputs:
-          terraformVersion: '0.14.9'
-      - script: terraform version
 - stage: RunDeployment
   jobs:
     - job: PlanAndApply
