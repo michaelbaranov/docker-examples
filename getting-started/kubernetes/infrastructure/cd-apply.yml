@@ -60,7 +60,7 @@ stages:
         inputs:
           connectionType: 'Azure Resource Manager'
           azureSubscription: 'DockerExamplesAzureConnection'
-          azureResourceGroup: '$(ResourceGroup)'
+          azureResourceGroup: '$(ResourceGroupName)'
           kubernetesCluster: $(AKSName)
           command: 'install'
           chartType: 'Name'
