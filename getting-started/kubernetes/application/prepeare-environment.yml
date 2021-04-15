@@ -17,14 +17,6 @@ jobs:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: 'az aks get-credentials --name $env:AKSNAME --resource-group $env:RESOURCEGROUPNAME --admin'
-    - task: Bash@3
-      displayName: 'Update kustomize'
-      inputs:
-        targetType: 'inline'
-        script: |
-          sudo rm /usr/local/bin/kustomize -rf
-          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | sudo bash -s /usr/local/bin
-          kustomize version
   - job: DeployExternal
     dependsOn: PrepeareAgent
     steps:
@@ -34,7 +26,7 @@ jobs:
         azureSubscription: 'DockerExamplesAzureConnection'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
-        inlineScript: 'kustomize build --load_restrictor none external/external-nosql | kubectl apply -f -'
+        inlineScript: 'kustomize build --load-restrictor none external/external-nosql | kubectl apply -f -'
         workingDirectory: getting-started/kubernetes/application/xp1/external
 pool:
   vmImage: ubuntu-latest
