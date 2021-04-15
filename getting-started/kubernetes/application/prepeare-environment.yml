@@ -22,6 +22,7 @@ jobs:
       inputs:
         targetType: 'inline'
         script: |
+          sudo rm /usr/local/bin/kustomize -rf
           curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash -s /usr/local/bin
           kustomize version
   - job: DeployExternal
