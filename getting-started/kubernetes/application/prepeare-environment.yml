@@ -25,6 +25,7 @@ jobs:
           curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash -s /usr/local/bin
           kustomize version
   - job: DeployExternal
+    dependsOn: PrepeareAgent
     steps:
     - task: AzureCLI@2
       displayName: "Deploy External services"
