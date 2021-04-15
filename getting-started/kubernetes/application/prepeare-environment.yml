@@ -9,7 +9,6 @@ variables:
 
 jobs: 
   - job: DeployExternal
-    dependsOn: PrepeareAgent
     steps:
     - task: AzureCLI@2
       displayName: "Get AKS Credentials"
