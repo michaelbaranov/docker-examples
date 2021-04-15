@@ -26,7 +26,7 @@ jobs:
         azureSubscription: 'DockerExamplesAzureConnection'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
-        inlineScript: 'kustomize build --load-restrictor none external/external-nosql | kubectl apply -f -'
+        inlineScript: 'kustomize build --load-restrictor LoadRestrictionsNone external/external-nosql | kubectl apply -f -'
         workingDirectory: getting-started/kubernetes/application/xp1/external
 pool:
   vmImage: ubuntu-latest
