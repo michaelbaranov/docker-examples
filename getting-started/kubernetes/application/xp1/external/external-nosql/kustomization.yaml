@@ -10,5 +10,5 @@ images:
   newTag: 8.4.0
 
 resources:
-  - redis.yaml
-  - solr.yaml
+  - ../redis.yaml
+  - ../solr.yaml
