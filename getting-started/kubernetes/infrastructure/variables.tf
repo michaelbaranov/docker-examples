@@ -52,3 +52,7 @@ variable "aks-name" {
 variable "resourceGroupName" {
   type = string
 }
+
+variable "elasticPoolName" {
+  type = string
+}
