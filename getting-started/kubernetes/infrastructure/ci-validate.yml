@@ -58,15 +58,6 @@ stages:
               Write-Output "Creating container  $env:STATECONTAINERNAME"
               az storage container create --name $env:STATECONTAINERNAME --account-name $env:STATESTORAGEACCOUNT --account-key $accountKey
           }
-- stage: PrepeareAgent
-  jobs:
-    - job: InstallTerraform
-      steps:
-      - task: TerraformInstaller@0
-        displayName: Install Terraform 
-        inputs:
-          terraformVersion: '0.14.5'
-      - script: terraform version
 - stage: RunIntegration
   jobs:
     - job: ValidateAndPlan
