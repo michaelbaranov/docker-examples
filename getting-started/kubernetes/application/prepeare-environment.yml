@@ -23,7 +23,7 @@ jobs:
       inputs:
         secureFile: 'license.xml'
     - task: PowerShell@2
-      displayName: "Install SitecoreDockerTools"
+      displayName: "Install powershell modules"
       inputs:
         targetType: 'inline'
         script: |
@@ -33,6 +33,7 @@ jobs:
           $dockerToolsVersion = "10.1.4"
           Write-Host "Installing SitecoreDockerTools..." -ForegroundColor Green
           Install-Module SitecoreDockerTools -RequiredVersion $dockerToolsVersion -Scope CurrentUser -Repository SitecoreGallery
+          Import-Module PKI
         pwsh: true
     - task: AzureCLI@2
       displayName: "Generate secrets"
