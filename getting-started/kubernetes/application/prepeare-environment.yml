@@ -33,7 +33,7 @@ jobs:
           $dockerToolsVersion = "10.1.4"
           Write-Host "Installing SitecoreDockerTools..." -ForegroundColor Green
           Install-Module SitecoreDockerTools -RequiredVersion $dockerToolsVersion -Scope CurrentUser -Repository SitecoreGallery
-          Import-Module PKI
+          Install-Module -Name SelfSignedCertificate -Repository PSGallery -Force
         pwsh: true
     - task: AzureCLI@2
       displayName: "Generate secrets"
@@ -54,7 +54,8 @@ jobs:
 
           Get-SitecoreRandomString 64 -DisallowSpecial > sitecore-identitysecret.txt
           $idCertPassword = Get-SitecoreRandomString 12 -DisallowSpecial
-          Get-SitecoreCertificateAsBase64String -DnsName "localhost" -Password (ConvertTo-SecureString -String $idCertPassword -Force -AsPlainText) > sitecore-identitycertificate.txt
+          $identityCertificate = New-SelfSignedCertificate -CommonName "localhost" -Passphrase $(ConvertTo-SecureString -Force -AsPlainText -String $idCertPassword)
+          [System.Convert]::ToBase64String($identityCertificate.RawData) > sitecore-identitycertificate.txt
           $idCertPassword > sitecore-identitycertificatepassword.txt
 
           ConvertTo-CompressedBase64String -Path $sitecoreLicense.secureFilePath > sitecore-license.txt
