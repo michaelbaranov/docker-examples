@@ -57,7 +57,7 @@ jobs:
           $identityCertificate = New-SelfSignedCertificate -CommonName "localhost" -Passphrase $(ConvertTo-SecureString -Force -AsPlainText -String $idCertPassword)
           [System.Convert]::ToBase64String($identityCertificate.RawData) > sitecore-identitycertificate.txt
           $idCertPassword > sitecore-identitycertificatepassword.txt
-          Write-Output "Secure file path $sitecoreLicense.secureFilePath"
+          Write-Output "Secure file path $(sitecoreLicense.secureFilePath)"
 
           ConvertTo-CompressedBase64String -Path $sitecoreLicense.secureFilePath > sitecore-license.txt
           Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-marketing-automation-database-password.txt
