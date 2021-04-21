@@ -59,7 +59,7 @@ jobs:
           $idCertPassword > sitecore-identitycertificatepassword.txt
           Write-Output "Secure file path $(sitecoreLicense.secureFilePath)"
 
-          ConvertTo-CompressedBase64String -Path $sitecoreLicense.secureFilePath > sitecore-license.txt
+          ConvertTo-CompressedBase64String -Path $(sitecoreLicense.secureFilePath) > sitecore-license.txt
           Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-marketing-automation-database-password.txt
           Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-master-database-password.txt
           Get-SitecoreRandomString 64 > sitecore-media-request-protection-shared-secret.txt
