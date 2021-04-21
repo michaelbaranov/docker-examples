@@ -17,6 +17,73 @@ jobs:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: 'az aks get-credentials --name $env:AKSNAME --resource-group $env:RESOURCEGROUPNAME --admin'
+    - task: DownloadSecureFile@1
+      name: sitecoreLicense
+      displayName: 'Download license file'
+      inputs:
+        secureFile: 'license.xml'
+    - task: PowerShell@2
+      displayName: "Install SitecoreDockerTools"
+      inputs:
+        targetType: 'inline'
+        script: |
+          Import-Module PowerShellGet
+          Write-Host "Adding Sitecore PowerShell Gallery..." -ForegroundColor Green 
+          Register-PSRepository -Name SitecoreGallery -SourceLocation https://sitecore.myget.org/F/sc-powershell/api/v2 -InstallationPolicy Trusted
+          $dockerToolsVersion = "10.1.4"
+          Write-Host "Installing SitecoreDockerTools..." -ForegroundColor Green
+          Install-Module SitecoreDockerTools -RequiredVersion $dockerToolsVersion -Scope CurrentUser -Repository SitecoreGallery
+        pwsh: true
+    - task: AzureCLI@2
+      displayName: "Generate secrets"
+      inputs:
+        azureSubscription: 'DockerExamplesAzureConnection'
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $env:SITECOREADMINPASSWORD > sitecore-adminpassword.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-collection-shardmapmanager-database-password.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-core-database-password.txt
+          $env:ELASTICPOOLNAME > sitecore-database-elastic-pool-name.txt
+          $env:SQLSAPASSWORD > sitecore-databasepassword.txt
+          $($env:SQLSERVERNAME)mbtestsql1.database.windows.net > sitecore-databaseservername.txt
+          "sitecore" > sitecore-databaseusername.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-exm-master-database-password.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-forms-database-password.txt
+
+          Get-SitecoreRandomString 64 -DisallowSpecial > sitecore-identitysecret.txt
+          $idCertPassword = Get-SitecoreRandomString 12 -DisallowSpecial
+          Get-SitecoreCertificateAsBase64String -DnsName "localhost" -Password (ConvertTo-SecureString -String $idCertPassword -Force -AsPlainText) > sitecore-identitycertificate.txt
+          $idCertPassword > sitecore-identitycertificatepassword.txt
+
+          ConvertTo-CompressedBase64String -Path $sitecoreLicense.secureFilePath) > sitecore-license.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-marketing-automation-database-password.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-master-database-password.txt
+          Get-SitecoreRandomString 64 > sitecore-media-request-protection-shared-secret.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-messaging-database-password.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-processing-engine-storage-database-password.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-processing-engine-tasks-database-password.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-processing-pools-database-password.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-processing-tasks-database-password.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-reference-data-database-password.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-reporting-database-password.txt
+          Get-SitecoreRandomString 64 -DisallowSpecial > sitecore-reportingapikey.txt
+          "http://solr:8983/solr/sitecore_xdb;solrCloud=true" > sitecore-solr-connection-string-xdb.txt
+          "http://solr:8983/solr;solrCloud=true" > sitecore-solr-connection-string.txt
+          Get-SitecoreRandomString 128 > sitecore-telerikencryptionkey.txt
+          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-web-database-password.txt
+        failOnStderr: true
+        showWarnings: true
+        pwsh: true
+        workingDirectory: getting-started/kubernetes/application/xp1/overlays/secrets
+    - task: AzureCLI@2
+      displayName: "Deploy secrets"
+      inputs:
+        azureSubscription: 'DockerExamplesAzureConnection'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'kustomize build . | kubectl apply -f -'
+        workingDirectory: getting-started/kubernetes/application/xp1/overlays/secrets
     - task: AzureCLI@2
       displayName: "Deploy External services"
       inputs:
