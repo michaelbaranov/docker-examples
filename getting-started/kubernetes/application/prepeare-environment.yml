@@ -46,7 +46,7 @@ jobs:
           Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-core-database-password.txt
           $env:ELASTICPOOLNAME > sitecore-database-elastic-pool-name.txt
           $env:SQLSAPASSWORD > sitecore-databasepassword.txt
-          $($env:SQLSERVERNAME)mbtestsql1.database.windows.net > sitecore-databaseservername.txt
+          "$($env:SQLSERVERNAME).database.windows.net" > sitecore-databaseservername.txt
           "sitecore" > sitecore-databaseusername.txt
           Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-exm-master-database-password.txt
           Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-forms-database-password.txt
