@@ -95,5 +95,13 @@ jobs:
         scriptLocation: 'inlineScript'
         inlineScript: 'kustomize build --load-restrictor LoadRestrictionsNone external | kubectl apply -f -'
         workingDirectory: getting-started/kubernetes/application/xp1/overlays
+    - task: AzureCLI@2
+      displayName: "Deploy submit queue PVC"
+      inputs:
+        azureSubscription: 'DockerExamplesAzureConnection'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'kubectl apply -f .'
+        workingDirectory: getting-started\kubernetes\application\xp1\volumes\azurefile
 pool:
   vmImage: ubuntu-latest
