@@ -102,6 +102,6 @@ jobs:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: 'kubectl apply -f submit-queue.yaml'
-        workingDirectory: getting-started\kubernetes\application\xp1\volumes\azurefile
+        workingDirectory: getting-started/kubernetes/application/xp1/volumes/azurefile
 pool:
   vmImage: ubuntu-latest
