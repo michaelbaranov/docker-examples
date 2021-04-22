@@ -85,8 +85,8 @@ jobs:
         azureSubscription: 'DockerExamplesAzureConnection'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
-        inlineScript: 'kustomize build . | kubectl apply -f -'
-        workingDirectory: getting-started/kubernetes/application/xp1/overlays/secrets
+        inlineScript: 'kustomize build secrets | kubectl apply -f -'
+        workingDirectory: getting-started/kubernetes/application/xp1/overlays
     - task: AzureCLI@2
       displayName: "Deploy External services"
       inputs:
@@ -103,5 +103,13 @@ jobs:
         scriptLocation: 'inlineScript'
         inlineScript: 'kubectl apply -f submit-queue.yaml'
         workingDirectory: getting-started/kubernetes/application/xp1/volumes/azurefile
+    - task: AzureCLI@2
+      displayName: "Run Init"
+      inputs:
+        azureSubscription: 'DockerExamplesAzureConnection'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'kustomize build --load-restrictor LoadRestrictionsNone init | kubectl apply -f -'
+        workingDirectory: getting-started/kubernetes/application/xp1/overlays
 pool:
   vmImage: ubuntu-latest
