@@ -11,7 +11,7 @@ variable "deployment_prefix" {
 }
 
 variable "acrname" {
-  type="string"
+  type=string
 }
 
 variable "log_analytics_workspace_sku"{
