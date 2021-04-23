@@ -23,6 +23,7 @@ stages:
           displayName: Obtain credentials
           inputs:
             azureSubscription: 'DockerExamplesAzureConnection'
+            
             scriptLocation: inlineScript
             inlineScript: |
               set -eu  # fail on error
@@ -74,6 +75,7 @@ stages:
                 -var aks-name=$(AKSName) \
                 -var resourceGroupName=$(ResourceGroupName) \
                 -var elasticPoolName=$(ElasticPoolName)
+            addSpnToEnvironment: true
             workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@1
           displayName: Terraform apply
@@ -82,6 +84,7 @@ stages:
             scriptLocation: inlineScript
             inlineScript: |
               terraform apply -auto-approve tfplan
+            addSpnToEnvironment: true
             workingDirectory: 'getting-started/kubernetes/infrastructure'
 - stage: ConfigureEnvironment
   jobs:
