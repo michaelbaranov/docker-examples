@@ -45,7 +45,6 @@ stages:
                 -backend-config=container_name=$(StateContainerName) \
                 -backend-config=key=$(StateFileName) \
                 -backend-config=resource_group_name=$(StateResourceGroupName)
-            addSpnToEnvironment: true
             workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@2
           displayName: Terraform validate
