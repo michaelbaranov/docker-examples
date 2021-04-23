@@ -31,20 +31,27 @@ stages:
               echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET;issecret=true]$servicePrincipalKey"
               echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]$subscriptionId"
               echo "##vso[task.setvariable variable=ARM_TENANT_ID]$tenantId"
-            addSpnToEnvironment: true
-        - task: AzureCLI@1
-          displayName: Terraform init
-          inputs:
-            azureSubscription: 'DockerExamplesAzureConnection'
-            scriptLocation: inlineScript
-            inlineScript: |
-              echo "$ARM_SUBSCRIPTION_ID"
+
               terraform init \
                 -backend-config=storage_account_name=$(StateStorageAccount) \
                 -backend-config=container_name=$(StateContainerName) \
                 -backend-config=key=$(StateFileName) \
                 -backend-config=resource_group_name=$(StateResourceGroupName)
             workingDirectory: 'getting-started/kubernetes/infrastructure'
+            addSpnToEnvironment: true
+        # - task: AzureCLI@1
+        #   displayName: Terraform init
+        #   inputs:
+        #     azureSubscription: 'DockerExamplesAzureConnection'
+        #     scriptLocation: inlineScript
+        #     inlineScript: |
+        #       echo "$ARM_SUBSCRIPTION_ID"
+        #       terraform init \
+        #         -backend-config=storage_account_name=$(StateStorageAccount) \
+        #         -backend-config=container_name=$(StateContainerName) \
+        #         -backend-config=key=$(StateFileName) \
+        #         -backend-config=resource_group_name=$(StateResourceGroupName)
+        #     workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@2
           displayName: Terraform validate
           inputs:
