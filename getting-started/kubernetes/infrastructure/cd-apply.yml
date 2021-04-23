@@ -57,6 +57,14 @@ stages:
             azureSubscription: 'DockerExamplesAzureConnection'
             scriptLocation: inlineScript
             inlineScript: |
+              terraform validate
+            workingDirectory: 'getting-started/kubernetes/infrastructure'
+        - task: AzureCLI@1
+          displayName: Terraform plan
+          inputs:
+            azureSubscription: 'DockerExamplesAzureConnection'
+            scriptLocation: inlineScript
+            inlineScript: |
               terraform plan -out=tfplan \
                 -var deployment_prefix=$(DeploymentPrefix) \
                 -var location=$(Location) \
@@ -65,7 +73,7 @@ stages:
                 -var sql_admin_password=$(SQLSAPassword) \
                 -var aks-name=$(AKSName) \
                 -var resourceGroupName=$(ResourceGroupName) \
-                -var elasticPoolName=$(ElasticPoolName) \
+                -var elasticPoolName=$(ElasticPoolName)
             workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@1
           displayName: Terraform apply
