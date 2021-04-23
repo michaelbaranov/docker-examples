@@ -32,11 +32,12 @@ stages:
               echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]$subscriptionId"
               echo "##vso[task.setvariable variable=ARM_TENANT_ID]$tenantId"
             addSpnToEnvironment: true
-        - task: CmdLine@2
+        - task: AzureCLI@1
           displayName: Terraform init
           inputs:
-            script: |
-              set -eux  # fail on error
+            azureSubscription: 'DockerExamplesAzureConnection'
+            scriptLocation: inlineScript
+            inlineScript: |
               echo "$ARM_SUBSCRIPTION_ID"
               terraform init \
                 -backend-config=storage_account_name=$(StateStorageAccount) \
