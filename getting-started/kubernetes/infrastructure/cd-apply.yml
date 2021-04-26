@@ -26,11 +26,11 @@ stages:
             scriptLocation: inlineScript
             inlineScript: |
               set -eu  # fail on error
-              subscriptionId=$(az account show --query id -o tsv)
-              echo "##vso[task.setvariable variable=ARM_CLIENT_ID]$servicePrincipalId"
-              echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET;issecret=true]$servicePrincipalKey"
-              echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]$subscriptionId"
-              echo "##vso[task.setvariable variable=ARM_TENANT_ID]$tenantId"
+              # subscriptionId=$(az account show --query id -o tsv)
+              # echo "##vso[task.setvariable variable=ARM_CLIENT_ID]$servicePrincipalId"
+              # echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET;issecret=true]$servicePrincipalKey"
+              # echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]$subscriptionId"
+              # echo "##vso[task.setvariable variable=ARM_TENANT_ID]$tenantId"
 
               terraform init \
                 -backend-config=storage_account_name=$(StateStorageAccount) \
@@ -39,6 +39,12 @@ stages:
                 -backend-config=resource_group_name=$(StateResourceGroupName)
             workingDirectory: 'getting-started/kubernetes/infrastructure'
             addSpnToEnvironment: true
+            env:
+              ARM_CLIENT_ID=$(servicePrincipalId)
+              ARM_CLIENT_SECRET=$(servicePrincipalKey)
+              ARM_SUBSCRIPTION_ID=$(subscriptionId)
+              ARM_TENANT_ID=$($tenantId)
+
         # - task: AzureCLI@1
         #   displayName: Terraform init
         #   inputs:
