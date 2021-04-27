@@ -4,12 +4,13 @@
 # https://aka.ms/yaml
 
 trigger:
-  branches:
-    exclude:
-      - master
-  paths:
-    include:
-    - getting-started/kubernetes/infrastructure
+  - none
+  # branches:
+  #   exclude:
+  #     - master
+  # paths:
+  #   include:
+  #   - getting-started/kubernetes/infrastructure
 
 variables:
 - group: docker-examples-variables
