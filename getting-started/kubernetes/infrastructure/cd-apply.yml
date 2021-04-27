@@ -42,7 +42,7 @@ stages:
               terraform init `
                 -backend-config=storage_account_name=$env:StateStorageAccount `
                 -backend-config=container_name=$env:StateContainerName `
-                -backend-config=key=$env:StateFileName
+                -backend-config=key=$env:StateFileName `
                 -backend-config=resource_group_name=$env:StateResourceGroupName
             workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@2
