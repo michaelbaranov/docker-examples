@@ -19,9 +19,10 @@ stages:
   jobs:
     - job: PlanAndApply
       steps:
-        - task: AzureCLI@1
+        - task: AzureCLI@2
           displayName: Obtain credentials
           inputs:
+            scriptType: 'bash'
             azureSubscription: 'DockerExamplesAzureConnection'
             scriptLocation: inlineScript
             inlineScript: |
