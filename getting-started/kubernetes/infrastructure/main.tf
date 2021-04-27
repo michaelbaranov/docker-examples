@@ -147,3 +147,11 @@ resource "azurerm_mssql_elasticpool" "elasticpool" {
     max_capacity = 1
   }
 }
+
+resource "azurerm_sql_firewall_rule" "firewall_azure_resources" {
+  name                = "allow_azure"
+  resource_group_name = azurerm_resource_group.rg.name
+  server_name         = azurerm_sql_server.sql.name
+  start_ip_address    = "0.0.0.0"
+  end_ip_address      = "0.0.0.0"
+}
