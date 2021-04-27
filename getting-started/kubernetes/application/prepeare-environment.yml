@@ -46,7 +46,7 @@ jobs:
           Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-collection-shardmapmanager-database-password.txt
           Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-core-database-password.txt
           $env:ELASTICPOOLNAME > sitecore-database-elastic-pool-name.txt
-          $env:SQLSAPASSWORD > sitecore-databasepassword.txt
+          $env:SQLSAPasswordMapped > sitecore-databasepassword.txt
           "$($env:SQLSERVERNAME).database.windows.net" > sitecore-databaseservername.txt
           "sitecore" > sitecore-databaseusername.txt
           Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-exm-master-database-password.txt
@@ -79,6 +79,8 @@ jobs:
         showWarnings: true
         pwsh: true
         workingDirectory: getting-started/kubernetes/application/xp1/overlays/secrets
+      env:
+        SQLSAPasswordMapped: $(SQLSAPASSWORD)
     - task: AzureCLI@2
       displayName: "Deploy secrets"
       inputs:
