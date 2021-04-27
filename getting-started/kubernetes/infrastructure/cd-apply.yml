@@ -56,10 +56,10 @@ stages:
               # echo "$ARM_CLIENT_ID"
               # echo "$ARM_TENANT_ID"
               terraform init `
-                -backend-config=storage_account_name=$env.StateStorageAccount `
-                -backend-config=container_name=$env.StateContainerName `
-                -backend-config=key=$env.StateFileName `
-                -backend-config=resource_group_name=$env.StateResourceGroupName
+                -backend-config=storage_account_name=$env:StateStorageAccount `
+                -backend-config=container_name=$env:StateContainerName `
+                -backend-config=key=$env:StateFileName `
+                -backend-config=resource_group_name=$env:StateResourceGroupName
             workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@2
           displayName: Terraform validate
@@ -78,14 +78,14 @@ stages:
             scriptLocation: inlineScript
             inlineScript: |
               terraform plan -out=tfplan `
-                -var deployment_prefix=$(DeploymentPrefix) `
-                -var location=$(Location) `
-                -var acrname=$(ACRName) `
-                -var sql-server-name=$(SQLServerName) `
-                -var sql_admin_password=$(SQLSAPassword) `
-                -var aks-name=$(AKSName) `
-                -var resourceGroupName=$(ResourceGroupName) `
-                -var elasticPoolName=$(ElasticPoolName)
+                -var deployment_prefix=$env:DeploymentPrefix `
+                -var location=$env:Location `
+                -var acrname=$env:ACRName `
+                -var sql-server-name=$env:SQLServerName `
+                -var sql_admin_password=$env:SQLSAPassword `
+                -var aks-name=$env:AKSName `
+                -var resourceGroupName=$env:ResourceGroupName `
+                -var elasticPoolName=$env:ElasticPoolName
             workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@2
           displayName: Terraform apply
