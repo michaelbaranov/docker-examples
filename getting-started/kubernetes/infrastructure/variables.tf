@@ -41,11 +41,11 @@ variable "sql_admin_password" {
   type = string  
 }
 
-variable "sql-server-name" {
+variable "sql_server_name" {
   type = string
 }
 
-variable "aks-name" {
+variable "aks_name" {
   type = string
 }
 

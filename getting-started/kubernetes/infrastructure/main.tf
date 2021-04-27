@@ -61,10 +61,10 @@ resource "azurerm_log_analytics_solution" "la" {
 }
 
 resource "azurerm_kubernetes_cluster" "aks" {
-    name                = var.aks-name
+    name                = var.aks_name
     location            = azurerm_resource_group.rg.location
     resource_group_name = azurerm_resource_group.rg.name
-    dns_prefix          = var.aks-name
+    dns_prefix          = var.aks_name
 
     default_node_pool {
         name            = "default"
@@ -119,7 +119,7 @@ resource "azurerm_role_assignment" "aks_acr" {
 }
 
 resource "azurerm_sql_server" "sql" {
-  name                         = var.sql-server-name
+  name                         = var.sql_server_name
   resource_group_name          = azurerm_resource_group.rg.name
   location                     = azurerm_resource_group.rg.location
   version                      = "12.0"
