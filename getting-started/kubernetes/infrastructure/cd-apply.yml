@@ -36,28 +36,29 @@ stages:
               # export ARM_CLIENT_SECRET=$servicePrincipalKey
               # export ARM_SUBSCRIPTION_ID=$subscriptionId
               # export ARM_TENANT_ID=$tenantId
-              echo $ARM_CLIENT_ID
 
+              # terraform init \
+              #   -backend-config=storage_account_name=$(StateStorageAccount) \
+              #   -backend-config=container_name=$(StateContainerName) \
+              #   -backend-config=key=$(StateFileName) \
+              #   -backend-config=resource_group_name=$(StateResourceGroupName)
 
+            workingDirectory: 'getting-started/kubernetes/infrastructure'
+            addSpnToEnvironment: true
+        - task: AzureCLI@2
+          displayName: Terraform init
+          inputs:
+            scriptType: 'bash'
+            azureSubscription: 'DockerExamplesAzureConnection'
+            scriptLocation: inlineScript
+            inlineScript: |
+              echo "$ARM_SUBSCRIPTION_ID"
               terraform init \
                 -backend-config=storage_account_name=$(StateStorageAccount) \
                 -backend-config=container_name=$(StateContainerName) \
                 -backend-config=key=$(StateFileName) \
                 -backend-config=resource_group_name=$(StateResourceGroupName)
-
             workingDirectory: 'getting-started/kubernetes/infrastructure'
-            addSpnToEnvironment: true
-        # - task: CmdLine@2
-        #   displayName: Terraform init
-        #   inputs:
-        #     script: |
-        #       echo "$ARM_SUBSCRIPTION_ID"
-        #       terraform init \
-        #         -backend-config=storage_account_name=$(StateStorageAccount) \
-        #         -backend-config=container_name=$(StateContainerName) \
-        #         -backend-config=key=$(StateFileName) \
-        #         -backend-config=resource_group_name=$(StateResourceGroupName)
-        #     workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@2
           displayName: Terraform validate
           inputs:
