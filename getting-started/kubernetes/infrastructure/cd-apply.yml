@@ -40,7 +40,7 @@ stages:
             scriptLocation: inlineScript
             inlineScript: |
               terraform init `
-                -backend-config=storage_account_name="$env:STATESTORAGEACCOUNT" `
+                -backend-config=storage_account_name="$env:StateStorageAccount" `
                 -backend-config=container_name="$env:STATECONTAINERNAME" `
                 -backend-config=key="$env:STATEFILENAME" `
                 -backend-config=resource_group_name="$env:STATERESOURCEGROUPNAME"
