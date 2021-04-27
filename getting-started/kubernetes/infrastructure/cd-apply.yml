@@ -70,10 +70,10 @@ stages:
                 -var aks-name="$env:AKSNAME" `
                 -var resourceGroupName="$env:RESOURCEGROUPNAME" `
                 -var elasticPoolName="$env:ELASTICPOOLNAME"
+            workingDirectory: 'getting-started/kubernetes/infrastructure'
           env:
             SQLSAPasswordMapped: $(SQLSAPASSWORD)
             addSpnToEnvironment: true
-            workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@2
           displayName: Terraform apply
           inputs:
