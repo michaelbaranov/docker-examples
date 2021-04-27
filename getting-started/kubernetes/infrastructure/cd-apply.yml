@@ -70,8 +70,8 @@ stages:
                 -var aks_name=$env:AKSNAME `
                 -var resourceGroupName=$env:RESOURCEGROUPNAME `
                 -var elasticPoolName=$env:ELASTICPOOLNAME
-            addSpnToEnvironment: true
             workingDirectory: 'getting-started/kubernetes/infrastructure'
+            addSpnToEnvironment: true
         - task: AzureCLI@2
           displayName: Terraform apply
           inputs:
