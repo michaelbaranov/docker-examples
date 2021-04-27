@@ -66,7 +66,7 @@ stages:
                 -var location="$env:LOCATION" `
                 -var acrname="$env:ACRNAME" `
                 -var sql_server_name="$env:SQLSERVERNAME" `
-                -var sql_admin_password="$SQLSAPasswordMapped" `
+                -var sql_admin_password="$env:SQLSAPasswordMapped" `
                 -var aks_name="$env:AKSNAME" `
                 -var resourceGroupName="$env:RESOURCEGROUPNAME" `
                 -var elasticPoolName="$env:ELASTICPOOLNAME"
