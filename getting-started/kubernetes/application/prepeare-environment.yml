@@ -42,7 +42,7 @@ jobs:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          $env:SITECOREADMINPASSWORD > sitecore-adminpassword.txt
+          $env:SitecoreAdminPasswordMapped > sitecore-adminpassword.txt
           Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-collection-shardmapmanager-database-password.txt
           Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-core-database-password.txt
           $env:ELASTICPOOLNAME > sitecore-database-elastic-pool-name.txt
@@ -80,7 +80,8 @@ jobs:
         pwsh: true
         workingDirectory: getting-started/kubernetes/application/xp1/overlays/secrets
       env:
-        SQLSAPasswordMapped: $(SQLSAPASSWORD)
+        SQLSAPasswordMapped: $(SQLSAPassword)
+        SitecoreAdminPasswordMapped: $(SitecoreAdminPassword)
     - task: AzureCLI@2
       displayName: "Deploy secrets"
       inputs:
