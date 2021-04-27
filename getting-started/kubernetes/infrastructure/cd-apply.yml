@@ -28,10 +28,10 @@ stages:
             inlineScript: |
               set -eu  # fail on error
               subscriptionId=$(az account show --query id -o tsv)
-              echo "##vso[task.setvariable variable=ARM_CLIENT_ID]$servicePrincipalId"
-              echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET;issecret=true]$servicePrincipalKey"
-              echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]$subscriptionId"
-              echo "##vso[task.setvariable variable=ARM_TENANT_ID]$tenantId"
+              echo "##vso[task.setvariable variable=ARM_CLIENT_ID]$(servicePrincipalId)"
+              echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET;issecret=true]$(servicePrincipalKey)"
+              echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]$(subscriptionId)"
+              echo "##vso[task.setvariable variable=ARM_TENANT_ID]$(tenantId)"
               # export ARM_CLIENT_ID=$servicePrincipalId
               # export ARM_CLIENT_SECRET=$servicePrincipalKey
               # export ARM_SUBSCRIPTION_ID=$subscriptionId
