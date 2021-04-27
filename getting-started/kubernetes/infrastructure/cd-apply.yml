@@ -40,10 +40,10 @@ stages:
             scriptLocation: inlineScript
             inlineScript: |
               terraform init `
-                -backend-config=storage_account_name=$env:StateStorageAccount `
-                -backend-config=container_name=$env:StateContainerName `
-                -backend-config=key=$env:StateFileName `
-                -backend-config=resource_group_name=$env:StateResourceGroupName
+                -backend-config=storage_account_name=$env:STATESTORAGEACCOUNT `
+                -backend-config=container_name=$env:STATECONTAINERNAME `
+                -backend-config=key=$env:STATEFILENAME `
+                -backend-config=resource_group_name=$env:STATERESOURCEGROUPNAME
             workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@2
           displayName: Terraform validate
@@ -62,14 +62,14 @@ stages:
             scriptLocation: inlineScript
             inlineScript: |
               terraform plan -out=tfplan `
-                -var deployment_prefix=$env:DeploymentPrefix `
-                -var location=$env:Location `
-                -var acrname=$env:ACRName `
-                -var sql-server-name=$env:SQLServerName `
-                -var sql_admin_password=$env:SQLSAPassword `
-                -var aks-name=$env:AKSName `
-                -var resourceGroupName=$env:ResourceGroupName `
-                -var elasticPoolName=$env:ElasticPoolName
+                -var deployment_prefix=$env:DEPLOYMENTPREFIX `
+                -var location=$env:LOCATION `
+                -var acrname=$env:ACRNAME `
+                -var sql-server-name=$env:SQLSERVERNAME `
+                -var sql_admin_password=$env:SQLSAPASSWORD `
+                -var aks-name=$env:AKSNAME `
+                -var resourceGroupName=$env:RESOURCEGROUPNAME `
+                -var elasticPoolName=$env:ELASTICPOOLNAME
             addSpnToEnvironment: true
             workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@2
