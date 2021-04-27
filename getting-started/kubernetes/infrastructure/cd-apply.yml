@@ -55,10 +55,10 @@ stages:
               # echo "$ARM_SUBSCRIPTION_ID"
               # echo "$ARM_CLIENT_ID"
               # echo "$ARM_TENANT_ID"
-              terraform init \
-                -backend-config=storage_account_name=$(StateStorageAccount) \
-                -backend-config=container_name=$(StateContainerName) \
-                -backend-config=key=$(StateFileName) \
+              terraform init `
+                -backend-config=storage_account_name=$(StateStorageAccount) `
+                -backend-config=container_name=$(StateContainerName) `
+                -backend-config=key=$(StateFileName) `
                 -backend-config=resource_group_name=$(StateResourceGroupName)
             workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@2
@@ -77,14 +77,14 @@ stages:
             scriptType: 'pscore'
             scriptLocation: inlineScript
             inlineScript: |
-              terraform plan -out=tfplan \
-                -var deployment_prefix=$(DeploymentPrefix) \
-                -var location=$(Location) \
-                -var acrname=$(ACRName) \
-                -var sql-server-name=$(SQLServerName) \
-                -var sql_admin_password=$(SQLSAPassword) \
-                -var aks-name=$(AKSName) \
-                -var resourceGroupName=$(ResourceGroupName) \
+              terraform plan -out=tfplan `
+                -var deployment_prefix=$(DeploymentPrefix) `
+                -var location=$(Location) `
+                -var acrname=$(ACRName) `
+                -var sql-server-name=$(SQLServerName) `
+                -var sql_admin_password=$(SQLSAPassword) `
+                -var aks-name=$(AKSName) `
+                -var resourceGroupName=$(ResourceGroupName) `
                 -var elasticPoolName=$(ElasticPoolName)
             workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@2
