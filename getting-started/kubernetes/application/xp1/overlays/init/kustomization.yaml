@@ -3,10 +3,10 @@ kind: Kustomization
 images:
 - name: sitecore-xp1-mssql-init
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-mssql-init
-  newTag: "219"
+  newTag: "229"
 - name: sitecore-xp1-solr-init
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-solr-init
-  newTag: "219"
+  newTag: "229"
 resources:
 - ../../init/mssql-init.yaml
 - ../../init/solr-init.yaml
