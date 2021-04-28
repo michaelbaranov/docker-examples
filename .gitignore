@@ -30,3 +30,5 @@ _ReSharper*/
 .vs/
 .vscode/
 packages/
+
+local.init.*
