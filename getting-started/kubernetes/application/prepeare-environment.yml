@@ -42,39 +42,39 @@ jobs:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          $env:SitecoreAdminPasswordMapped > sitecore-adminpassword.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-collection-shardmapmanager-database-password.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-core-database-password.txt
-          $env:ELASTICPOOLNAME > sitecore-database-elastic-pool-name.txt
-          $env:SQLSAPasswordMapped > sitecore-databasepassword.txt
-          "$($env:SQLSERVERNAME).database.windows.net" > sitecore-databaseservername.txt
-          "sitecore" > sitecore-databaseusername.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-exm-master-database-password.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-forms-database-password.txt
+          $env:SitecoreAdminPasswordMapped | Set-Content  sitecore-adminpassword.txt -NoNewline
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-collection-shardmapmanager-database-password.txt  -NoNewline
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-core-database-password.txt  -NoNewline
+          $env:ELASTICPOOLNAME | Set-Content sitecore-database-elastic-pool-name.txt  -NoNewline
+          $env:SQLSAPasswordMapped | Set-Content sitecore-databasepassword.txt  -NoNewline
+          "$($env:SQLSERVERNAME).database.windows.net" | Set-Content sitecore-databaseservername.txt  -NoNewline
+          "sitecore" | Set-Content sitecore-databaseusername.txt  -NoNewline
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-exm-master-database-password.txt  -NoNewline
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-forms-database-password.txt  -NoNewline
 
-          Get-SitecoreRandomString 64 -DisallowSpecial > sitecore-identitysecret.txt
+          Get-SitecoreRandomString 64 -DisallowSpecial | Set-Content sitecore-identitysecret.txt  -NoNewline 
           $idCertPassword = Get-SitecoreRandomString 12 -DisallowSpecial
           $identityCertificate = New-SelfSignedCertificate -CommonName "localhost" -Passphrase $(ConvertTo-SecureString -Force -AsPlainText -String $idCertPassword)
-          [System.Convert]::ToBase64String($identityCertificate.RawData) > sitecore-identitycertificate.txt
-          $idCertPassword > sitecore-identitycertificatepassword.txt
+          [System.Convert]::ToBase64String($identityCertificate.RawData) | Set-Content sitecore-identitycertificate.txt -NoNewline 
+          $idCertPassword | Set-Content sitecore-identitycertificatepassword.txt -NoNewline 
           Write-Output "Secure file path $(sitecoreLicense.secureFilePath)"
 
-          ConvertTo-CompressedBase64String -Path $(sitecoreLicense.secureFilePath) > sitecore-license.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-marketing-automation-database-password.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-master-database-password.txt
-          Get-SitecoreRandomString 64 > sitecore-media-request-protection-shared-secret.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-messaging-database-password.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-processing-engine-storage-database-password.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-processing-engine-tasks-database-password.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-processing-pools-database-password.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-processing-tasks-database-password.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-reference-data-database-password.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-reporting-database-password.txt
-          Get-SitecoreRandomString 64 -DisallowSpecial > sitecore-reportingapikey.txt
-          "http://solr:8983/solr/sitecore_xdb;solrCloud=true" > sitecore-solr-connection-string-xdb.txt
-          "http://solr:8983/solr;solrCloud=true" > sitecore-solr-connection-string.txt
-          Get-SitecoreRandomString 128 > sitecore-telerikencryptionkey.txt
-          Get-SitecoreRandomString 12 -EnforceComplexity > sitecore-web-database-password.txt
+          ConvertTo-CompressedBase64String -Path $(sitecoreLicense.secureFilePath) | Set-Content sitecore-license.txt -NoNewline 
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-marketing-automation-database-password.txt -NoNewline 
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-master-database-password.txt -NoNewline 
+          Get-SitecoreRandomString 64 | Set-Content sitecore-media-request-protection-shared-secret.txt -NoNewline 
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-messaging-database-password.txt -NoNewline 
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-processing-engine-storage-database-password.txt -NoNewline 
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-processing-engine-tasks-database-password.txt -NoNewline 
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-processing-pools-database-password.txt -NoNewline 
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-processing-tasks-database-password.txt -NoNewline 
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-reference-data-database-password.txt -NoNewline 
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-reporting-database-password.txt -NoNewline 
+          Get-SitecoreRandomString 64 -DisallowSpecial | Set-Content sitecore-reportingapikey.txt -NoNewline 
+          "http://solr:8983/solr/sitecore_xdb;solrCloud=true" | Set-Content sitecore-solr-connection-string-xdb.txt -NoNewline 
+          "http://solr:8983/solr;solrCloud=true" | Set-Content sitecore-solr-connection-string.txt -NoNewline 
+          Get-SitecoreRandomString 128 | Set-Content sitecore-telerikencryptionkey.txt -NoNewline 
+          Get-SitecoreRandomString 12 -EnforceComplexity | Set-Content sitecore-web-database-password.txt -NoNewline 
         failOnStderr: true
         showWarnings: true
         pwsh: true
