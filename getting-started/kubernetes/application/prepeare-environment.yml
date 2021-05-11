@@ -86,7 +86,7 @@ jobs:
       displayName: "Deploy secrets"
       inputs:
         azureSubscription: 'DockerExamplesAzureConnection'
-        scriptType: 'bash'
+        scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: 'kustomize build secrets | kubectl apply -f -'
         workingDirectory: getting-started/kubernetes/application/xp1/overlays
@@ -94,15 +94,19 @@ jobs:
       displayName: "Deploy External services"
       inputs:
         azureSubscription: 'DockerExamplesAzureConnection'
-        scriptType: 'bash'
+        scriptType: 'pscore'
         scriptLocation: 'inlineScript'
-        inlineScript: 'kustomize build --load-restrictor LoadRestrictionsNone external | kubectl apply -f -'
+        inlineScript: |
+          kustomize build --load-restrictor LoadRestrictionsNone external | kubectl apply -f -
+          do {
+              $solrDeployment = kubectl get deployment solr -o json | ConvertFrom-Json
+          } while ($solrDeployment.status.replicas -ne $solrDeployment.status.readyReplicas)
         workingDirectory: getting-started/kubernetes/application/xp1/overlays
     - task: AzureCLI@2
       displayName: "Deploy submit queue PVC"
       inputs:
         azureSubscription: 'DockerExamplesAzureConnection'
-        scriptType: 'bash'
+        scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: 'kubectl apply -f submit-queue.yaml'
         workingDirectory: getting-started/kubernetes/application/xp1/volumes/azurefile
@@ -110,7 +114,7 @@ jobs:
       displayName: "Run Init"
       inputs:
         azureSubscription: 'DockerExamplesAzureConnection'
-        scriptType: 'bash'
+        scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: 'kustomize build --load-restrictor LoadRestrictionsNone init | kubectl apply -f -'
         workingDirectory: getting-started/kubernetes/application/xp1/overlays
