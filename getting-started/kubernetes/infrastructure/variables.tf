@@ -26,14 +26,14 @@ variable "default_node_pool" {
   })
   default = {
     agent_count = 1 
-    size = "Standard_D2_v3"
+    size = "Standard_D2_v4"
   }
 }
 
 variable additional_node_pool {
   default = {
       node_count = 1
-      size = "Standard_D2_v3"
+      size = "Standard_D8_v4"
     }
 }  
 
