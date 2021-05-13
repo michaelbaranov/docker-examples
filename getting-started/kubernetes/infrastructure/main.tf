@@ -176,6 +176,11 @@ resource "helm_release" "nginx_ingress" {
     value = "linux"
   }
 
+  set{
+    name = "controller.replicaCount"
+    value = "1"
+  }
+
   set {
     name = "controller.config.proxy-body-size"
     value = "10m"
