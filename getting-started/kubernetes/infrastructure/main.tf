@@ -142,6 +142,9 @@ resource "helm_release" "nginx_ingress" {
   chart      = "nginx-ingress"
   namespace = "ingress-basic"
   create_namespace = true
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
+  ]
 
   set {
     name  = "rbac.create"
