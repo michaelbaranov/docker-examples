@@ -5,3 +5,7 @@ output "sql_fqdn" {
 output "aks" {
   value = azurerm_kubernetes_cluster.aks.fqdn
 }
+
+output "publicdns_cd" {
+  value = "cd.${azurerm_public_ip.nginx_ingress.fqdn}"
+}

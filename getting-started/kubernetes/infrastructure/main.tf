@@ -118,6 +118,68 @@ resource "azurerm_role_assignment" "aks_acr" {
   principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
 }
 
+provider "helm" {
+  kubernetes {
+    host                   = azurerm_kubernetes_cluster.aks.kube_config.0.host
+    client_certificate     = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)
+    client_key             = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_key)
+    cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
+  }
+}
+
+resource "azurerm_public_ip" "nginx_ingress" {
+  name                         = "nginx-ingress-pip"
+  location                     = azurerm_resource_group.rg.location
+  resource_group_name          = azurerm_resource_group.rg.name
+  allocation_method            = "Static"
+  domain_name_label            = var.publicDNSprefix
+  sku                          = "Standard"
+}
+
+resource "helm_release" "nginx_ingress" {
+  name       = "nginx-ingress"
+  repository = "https://charts.helm.sh/stable"
+  chart      = "nginx-ingress"
+  namespace = "ingress-basic"
+  create_namespace = true
+
+  set {
+    name  = "rbac.create"
+    value = "false"
+  }
+
+  set {
+    name  = "controller.service.externalTrafficPolicy"
+    value = "Local"
+  }
+
+  set {
+    name  = "controller.service.loadBalancerIP"
+    value = azurerm_public_ip.nginx_ingress.ip_address
+  }
+
+  set {
+    name  = "controller.nodeSelector.\"beta\\.kubernetes\\.io/os\""
+    value = "linux"
+  }
+
+  set {
+    name  = "defaultBackend.nodeSelector.\"beta\\.kubernetes\\.io/os\""
+    value = "linux"
+  }
+
+  set {
+    name  = "controller.admissionWebhooks.patch.nodeSelector.\"beta\\.kubernetes\\.io/os\""
+    value = "linux"
+  }
+
+  set {
+    name = "controller.config.proxy-body-size"
+    value = "10m"
+    type = "string"
+  }
+}
+
 resource "azurerm_sql_server" "sql" {
   name                         = var.sql_server_name
   resource_group_name          = azurerm_resource_group.rg.name
