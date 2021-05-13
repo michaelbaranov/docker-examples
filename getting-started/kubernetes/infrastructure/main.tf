@@ -132,7 +132,7 @@ resource "azurerm_public_ip" "nginx_ingress" {
   location                     = azurerm_resource_group.rg.location
   resource_group_name          = azurerm_resource_group.rg.name
   allocation_method            = "Static"
-  domain_name_label            = var.publicDNSprefix
+  domain_name_label            = var.publicDNSPrefix
   sku                          = "Standard"
 }
 
