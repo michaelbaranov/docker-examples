@@ -57,6 +57,6 @@ variable "elasticPoolName" {
   type = string
 }
 
-variable "publicDNSprefix" {
+variable "publicDNSPrefix" {
   type = string
 }
