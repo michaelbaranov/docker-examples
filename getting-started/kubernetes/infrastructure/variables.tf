@@ -56,3 +56,7 @@ variable "resourceGroupName" {
 variable "elasticPoolName" {
   type = string
 }
+
+variable "publicDNSprefix" {
+  type = string
+}
