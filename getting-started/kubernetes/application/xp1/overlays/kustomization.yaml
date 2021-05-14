@@ -3,46 +3,46 @@ kind: Kustomization
 images:
 - name: sitecore-xp1-cd
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-cd
-  newTag: "271"
+  newTag: "274"
 - name: sitecore-xp1-cm
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-cm
-  newTag: "271"
+  newTag: "274"
 - name: sitecore-xp1-id
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-id
-  newTag: "271"
+  newTag: "274"
 - name: sitecore-xp1-cortexprocessing
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-cortexprocessing
-  newTag: "271"
+  newTag: "274"
 - name: sitecore-xp1-cortexprocessingworker
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-cortexprocessingworker
-  newTag: "271"
+  newTag: "274"
 - name: sitecore-xp1-cortexreporting
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-cortexreporting
-  newTag: "271"
+  newTag: "274"
 - name: sitecore-xp1-prc
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-prc
-  newTag: "271"
+  newTag: "274"
 - name: sitecore-xp1-xdbautomation
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-xdbautomation
-  newTag: "271"
+  newTag: "274"
 - name: sitecore-xp1-xdbautomationrpt
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-xdbautomationrpt
-  newTag: "271"
+  newTag: "274"
 - name: sitecore-xp1-xdbautomationworker
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-xdbautomationworker
-  newTag: "271"
+  newTag: "274"
 - name: sitecore-xp1-xdbcollection
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-xdbcollection
-  newTag: "271"
+  newTag: "274"
 - name: sitecore-xp1-xdbrefdata
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-xdbrefdata
-  newTag: "271"
+  newTag: "274"
 - name: sitecore-xp1-xdbsearch
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-xdbsearch
-  newTag: "271"
+  newTag: "274"
 - name: sitecore-xp1-xdbsearchworker
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-xdbsearchworker
-  newTag: "271"
+  newTag: "274"
 resources:
 - ../cm.yaml
 - ../cd.yaml
