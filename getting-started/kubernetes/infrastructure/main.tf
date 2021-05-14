@@ -19,6 +19,12 @@ provider "azurerm" {
 resource "azurerm_resource_group" "rg" {
   name     = var.resourceGroupName
   location = var.location
+
+  lifecycle {
+      ignore_changes = [
+        tags
+      ]
+    }
 }
 
 resource "random_id" "log_analytics_workspace_name_suffix" {
@@ -45,6 +51,12 @@ resource "azurerm_log_analytics_workspace" "la" {
     location            = azurerm_resource_group.rg.location
     resource_group_name = azurerm_resource_group.rg.name
     sku                 = var.log_analytics_workspace_sku
+
+    lifecycle {
+      ignore_changes = [
+        tags
+      ]
+    }
 }
 
 resource "azurerm_log_analytics_solution" "la" {
@@ -57,6 +69,12 @@ resource "azurerm_log_analytics_solution" "la" {
     plan {
         publisher = "Microsoft"
         product   = "OMSGallery/ContainerInsights"
+    }
+
+    lifecycle {
+      ignore_changes = [
+        tags
+      ]
     }
 }
 
@@ -92,6 +110,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
     network_profile {
       network_plugin = "azure"
     }
+
+    lifecycle {
+      ignore_changes = [
+        tags
+      ]
+    }
 }
 
 resource "azurerm_kubernetes_cluster_node_pool" "node_pools" {
@@ -110,6 +134,12 @@ resource "azurerm_container_registry" "acr" {
   location                 = azurerm_resource_group.rg.location
   sku                      = "Standard"
   admin_enabled            = false
+
+  lifecycle {
+      ignore_changes = [
+        tags
+      ]
+    }
 }
 
 resource "azurerm_role_assignment" "aks_acr" {
@@ -134,12 +164,18 @@ resource "azurerm_public_ip" "nginx_ingress" {
   allocation_method            = "Static"
   domain_name_label            = var.publicDNSPrefix
   sku                          = "Standard"
+
+  lifecycle {
+      ignore_changes = [
+        tags
+      ]
+    }
 }
 
 resource "helm_release" "nginx_ingress" {
-  name       = "nginx-ingress"
-  repository = "https://charts.helm.sh/stable"
-  chart      = "nginx-ingress"
+  name       = "ingress-nginx"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
   namespace = "ingress-basic"
   create_namespace = true
   depends_on = [
@@ -148,7 +184,7 @@ resource "helm_release" "nginx_ingress" {
 
   set {
     name  = "rbac.create"
-    value = "false"
+    value = "true"
   }
 
   set {
@@ -162,17 +198,17 @@ resource "helm_release" "nginx_ingress" {
   }
 
   set {
-    name  = "controller.nodeSelector.\"beta\\.kubernetes\\.io/os\""
+    name  = "controller.nodeSelector\\.kubernetes\\.io/os"
     value = "linux"
   }
 
   set {
-    name  = "defaultBackend.nodeSelector.\"beta\\.kubernetes\\.io/os\""
+    name  = "defaultBackend.nodeSelector\\.kubernetes\\.io/os"
     value = "linux"
   }
 
   set {
-    name  = "controller.admissionWebhooks.patch.nodeSelector.\"beta\\.kubernetes\\.io/os\""
+    name  = "controller.admissionWebhooks.patch.nodeSelector\\.kubernetes\\.io/os"
     value = "linux"
   }
 
@@ -195,6 +231,12 @@ resource "azurerm_sql_server" "sql" {
   version                      = "12.0"
   administrator_login          = "sitecore"
   administrator_login_password = var.sql_admin_password
+
+  lifecycle {
+      ignore_changes = [
+        tags
+      ]
+    }
 }
 
 resource "azurerm_mssql_elasticpool" "elasticpool" {
@@ -216,6 +258,12 @@ resource "azurerm_mssql_elasticpool" "elasticpool" {
     min_capacity = 0
     max_capacity = 1
   }
+
+  lifecycle {
+      ignore_changes = [
+        tags
+      ]
+    }
 }
 
 resource "azurerm_sql_firewall_rule" "firewall_azure_resources" {
