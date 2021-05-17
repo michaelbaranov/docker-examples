@@ -222,6 +222,11 @@ resource "helm_release" "nginx_ingress" {
     value = "10m"
     type = "string"
   }
+
+  set{
+    name = "use-forwarded-headers"
+    value = "true"
+  }
 }
 
 resource "azurerm_sql_server" "sql" {
