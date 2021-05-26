@@ -58,3 +58,5 @@ resources:
 - ../xdbrefdata.yaml
 - ../xdbsearch.yaml
 - ../xdbsearchworker.yaml
+patchesStrategicMerge:
+- environment-variables.yaml

@@ -7,5 +7,9 @@ output "aks" {
 }
 
 output "publicdns_cd" {
-  value = "cd.${azurerm_public_ip.nginx_ingress.fqdn}"
+  value = azurerm_dns_a_record.cd_dns_record.fqdn
+}
+
+output "publicdns_cm" {
+  value = azurerm_dns_a_record.cm_dns_record.fqdn
 }
