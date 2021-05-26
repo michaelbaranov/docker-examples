@@ -160,9 +160,8 @@ provider "helm" {
 resource "azurerm_public_ip" "nginx_ingress" {
   name                         = "nginx-ingress-pip"
   location                     = azurerm_resource_group.rg.location
-  resource_group_name          = azurerm_resource_group.rg.name
+  resource_group_name          = azurerm_kubernetes_cluster.aks.node_resource_group
   allocation_method            = "Static"
-  domain_name_label            = var.publicDNSPrefix
   sku                          = "Standard"
 
   lifecycle {
@@ -227,6 +226,87 @@ resource "helm_release" "nginx_ingress" {
     name = "use-forwarded-headers"
     value = "true"
   }
+
+  set {
+    name = "controller.admissionWebhooks.enabled"
+    value = "false"
+  }
+}
+
+resource "helm_release" "cert_manager" {
+  name       = "cert-manager"
+  chart      = "cert-manager"
+  repository = "https://charts.jetstack.io"
+  namespace = "ingress-basic"
+  create_namespace = true
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
+  ]
+
+  set {
+    name = "ingressShim.defaultIssuerName"
+    value = "letsencrypt"
+  }
+
+  set {
+     name = "ingressShim.defaultIssuerKind"
+     value = "ClusterIssuer"
+  }
+
+  set {
+    name = "installCRDs"
+    value = "true"
+  }
+
+  set {
+    name = "nodeSelector\\.kubernetes\\.io/os"
+    value = "linux"
+  }
+  
+  set {
+    name = "webhook.nodeSelector\\.kubernetes\\.io/os"
+    value = "linux"
+  }
+  
+  set {
+    name = "cainjector.nodeSelector\\.kubernetes\\.io/os"
+    value = "linux"
+  }
+}
+
+resource "azurerm_dns_zone" "dns_zone" {
+  name                = var.domainName
+  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
+
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
+}
+
+resource "azurerm_dns_a_record" "cm_dns_record" {
+  name                = "cm"
+  zone_name           = azurerm_dns_zone.dns_zone.name
+  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
+  ttl                 = 300
+  target_resource_id  = azurerm_public_ip.nginx_ingress.id
+}
+
+resource "azurerm_dns_a_record" "id_dns_record" {
+  name                = "id"
+  zone_name           = azurerm_dns_zone.dns_zone.name
+  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
+  ttl                 = 300
+  target_resource_id  = azurerm_public_ip.nginx_ingress.id
+}
+
+resource "azurerm_dns_a_record" "cd_dns_record" {
+  name                = "@"
+  zone_name           = azurerm_dns_zone.dns_zone.name
+  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
+  ttl                 = 300
+  target_resource_id  = azurerm_public_ip.nginx_ingress.id
 }
 
 resource "azurerm_sql_server" "sql" {

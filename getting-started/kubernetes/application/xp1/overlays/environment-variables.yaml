@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cm
+spec:
+  template:
+    spec:
+      containers:
+        - name: sitecore-xp1-cm
+          env:
+            - name: Sitecore_Identity_Server_Authority
+              value: https://id.docker-examples.tk
+            - name: Sitecore_Identity_Server_CallbackAuthority
+              value: https://cm.docker-examples.tk
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: id
+spec:
+  template:
+    spec:
+      containers:
+        - name: sitecore-xp1-id
+          env:
+            - name: Sitecore_Sitecore__IdentityServer__AccountOptions__PasswordRecoveryUrl
+              value: https://cm.docker-examples.tk/sitecore/login?rc=1
+            - name: Sitecore_Sitecore__IdentityServer__Clients__DefaultClient__AllowedCorsOrigins__AllowedCorsOriginsGroup1
+              value: https://cm.docker-examples.tk
+            - name: Sitecore_Sitecore__IdentityServer__PublicOrigin
+              value: https://id.docker-examples.tk
