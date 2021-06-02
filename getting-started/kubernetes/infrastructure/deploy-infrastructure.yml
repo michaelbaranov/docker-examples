@@ -70,7 +70,7 @@ stages:
                 -var aks_name="$env:AKSNAME" `
                 -var resourceGroupName="$env:RESOURCEGROUPNAME" `
                 -var elasticPoolName="$env:ELASTICPOOLNAME" `
-                -var publicDNSPrefix="$env:PUBLICDNSPREFIX"
+                -var domainName="$env:DomainName"
             workingDirectory: 'getting-started/kubernetes/infrastructure'
           env:
             SQLSAPasswordMapped: $(SQLSAPASSWORD)
