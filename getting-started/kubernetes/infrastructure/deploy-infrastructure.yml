@@ -70,7 +70,7 @@ stages:
                 -var aks_name=$env:AKSNAME `
                 -var resourceGroupName=$env:RESOURCEGROUPNAME `
                 -var elasticPoolName=$env:ELASTICPOOLNAME
-                -var domainName="$env:DomainName"
+                -var domainName="$env:DOMAINNAME"
             workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@2
           displayName: Terraform apply
