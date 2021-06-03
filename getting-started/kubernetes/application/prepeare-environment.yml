@@ -55,7 +55,7 @@ jobs:
           Get-SitecoreRandomString 64 -DisallowSpecial | Set-Content sitecore-identitysecret.txt  -NoNewline 
           $idCertPassword = Get-SitecoreRandomString 12 -DisallowSpecial
           New-SelfSignedCertificate -CommonName "localhost" -Passphrase $(ConvertTo-SecureString -Force -AsPlainText -String $idCertPassword) -OutCertPath certificate.pfx
-          [convert]::ToBase64String([System.IO.File]::ReadAllBytes(certificate.pfx)) | Set-Content sitecore-identitycertificate.txt -NoNewline 
+          [convert]::ToBase64String([System.IO.File]::ReadAllBytes("certificate.pfx")) | Set-Content sitecore-identitycertificate.txt -NoNewline 
           $idCertPassword | Set-Content sitecore-identitycertificatepassword.txt -NoNewline 
           Write-Output "Secure file path $(sitecoreLicense.secureFilePath)"
 
