@@ -118,7 +118,7 @@ jobs:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          kustomize build --load-restrictor LoadRestrictionsNone init | kubectl apply -f -'
+          kustomize build --load-restrictor LoadRestrictionsNone init | kubectl apply -f -
           do {
             Start-Sleep -Seconds 10
             $mssqlinitjob=kubectl get jobs mssql-init -o json | convertfrom-json
