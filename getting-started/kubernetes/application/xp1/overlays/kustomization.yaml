@@ -44,19 +44,19 @@ images:
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-xdbsearchworker
   newTag: "315"
 resources:
-- ../cm.yaml
-- ../cd.yaml
-- ../id.yaml
-- ../cortexprocessing.yaml
-- ../cortexprocessingworker.yaml
-- ../cortexreporting.yaml
-- ../prc.yaml
-- ../xdbautomation.yaml
-- ../xdbautomationrpt.yaml
-- ../xdbautomationworker.yaml
-- ../xdbcollection.yaml
-- ../xdbrefdata.yaml
-- ../xdbsearch.yaml
-- ../xdbsearchworker.yaml
+- ../base/cm.yaml
+- ../base/cd.yaml
+- ../base/id.yaml
+- ../base/cortexprocessing.yaml
+- ../base/cortexprocessingworker.yaml
+- ../base/cortexreporting.yaml
+- ../base/prc.yaml
+- ../base/xdbautomation.yaml
+- ../base/xdbautomationrpt.yaml
+- ../base/xdbautomationworker.yaml
+- ../base/xdbcollection.yaml
+- ../base/xdbrefdata.yaml
+- ../base/xdbsearch.yaml
+- ../base/xdbsearchworker.yaml
 patchesStrategicMerge:
 - environment-variables.yaml

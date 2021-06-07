@@ -8,5 +8,5 @@ images:
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-solr-init
   newTag: "315"
 resources:
-- ../../init/mssql-init.yaml
-- ../../init/solr-init.yaml
+- ../../base/init/mssql-init.yaml
+- ../../base/init/solr-init.yaml

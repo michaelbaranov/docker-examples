@@ -31,8 +31,8 @@ jobs:
         azureSubscription: 'DockerExamplesAzureConnection'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
-        inlineScript: 'kustomize build --load-restrictor LoadRestrictionsNone . | kubectl apply -f -'
-        workingDirectory: getting-started/kubernetes/application/xp1/overlays/ingress-nginx
+        inlineScript: 'kustomize build --load-restrictor LoadRestrictionsNone ingress-nginx | kubectl apply -f -'
+        workingDirectory: getting-started/kubernetes/application/xp1/overlays
 
 pool:
   vmImage: ubuntu-latest
