@@ -43,6 +43,9 @@ images:
 - name: sitecore-xp1-xdbsearchworker
   newName: mbtestacr.azurecr.io/docker-examples/docker-examples-xp1-xdbsearchworker
   newTag: "320"
+- name: sitecore-horizon
+  newName: scr.sitecore.com/sxp/modules/sitecore-horizon
+  newTag: "2.26-ltsc2019"
 resources:
 - ../base/cm.yaml
 - ../base/cd.yaml
@@ -58,6 +61,7 @@ resources:
 - ../base/xdbrefdata.yaml
 - ../base/xdbsearch.yaml
 - ../base/xdbsearchworker.yaml
+- ../componenst/horizon/hrz.yaml
 patchesStrategicMerge:
 - environment-variables.yaml
 - horizon/patch-cm.yaml
