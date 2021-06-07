@@ -40,10 +40,10 @@ stages:
             scriptLocation: inlineScript
             inlineScript: |
               terraform init `
-                -backend-config=storage_account_name=$env:STATESTORAGEACCOUNT `
-                -backend-config=container_name=$env:STATECONTAINERNAME `
-                -backend-config=key=$env:STATEFILENAME `
-                -backend-config=resource_group_name=$env:STATERESOURCEGROUPNAME
+                -backend-config=storage_account_name="$env:STATESTORAGEACCOUNT" `
+                -backend-config=container_name="$env:STATECONTAINERNAME" `
+                -backend-config=key="$env:STATEFILENAME" `
+                -backend-config=resource_group_name="$env:STATERESOURCEGROUPNAME"
             workingDirectory: 'getting-started/kubernetes/infrastructure'
         - task: AzureCLI@2
           displayName: Terraform validate
@@ -62,16 +62,18 @@ stages:
             scriptLocation: inlineScript
             inlineScript: |
               terraform plan -out=tfplan `
-                -var deployment_prefix=$env:DEPLOYMENTPREFIX `
-                -var location=$env:LOCATION `
-                -var acrname=$env:ACRNAME `
-                -var sql_server_name=$env:SQLSERVERNAME `
-                -var sql_admin_password=$env:SQLSAPASSWORD `
-                -var aks_name=$env:AKSNAME `
-                -var resourceGroupName=$env:RESOURCEGROUPNAME `
-                -var elasticPoolName=$env:ELASTICPOOLNAME
+                -var deployment_prefix="$env:DEPLOYMENTPREFIX" `
+                -var location="$env:LOCATION" `
+                -var acrname="$env:ACRNAME" `
+                -var sql_server_name="$env:SQLSERVERNAME" `
+                -var sql_admin_password="$env:SQLSAPasswordMapped" `
+                -var aks_name="$env:AKSNAME" `
+                -var resourceGroupName="$env:RESOURCEGROUPNAME" `
+                -var elasticPoolName="$env:ELASTICPOOLNAME" `
                 -var domainName="$env:DOMAINNAME"
             workingDirectory: 'getting-started/kubernetes/infrastructure'
+          env:
+            SQLSAPasswordMapped: $(SQLSAPASSWORD)
         - task: AzureCLI@2
           displayName: Terraform apply
           inputs:
