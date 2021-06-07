@@ -17,6 +17,7 @@ spec:
       - docker-examples.tk
       - cm.docker-examples.tk
       - id.docker-examples.tk
+      - hrz.docker-examples.tk
       secretName: tls-secret
   rules:
   - host: docker-examples.tk
@@ -47,5 +48,15 @@ spec:
         backend:
           service:
             name: id
+            port: 
+              number: 80
+  - host: hrz.docker-examples.tk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hrz
             port: 
               number: 80

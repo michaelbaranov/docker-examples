@@ -309,6 +309,14 @@ resource "azurerm_dns_a_record" "cd_dns_record" {
   target_resource_id  = azurerm_public_ip.nginx_ingress.id
 }
 
+resource "azurerm_dns_a_record" "hrz_dns_record" {
+  name                = "hrz"
+  zone_name           = azurerm_dns_zone.dns_zone.name
+  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
+  ttl                 = 300
+  target_resource_id  = azurerm_public_ip.nginx_ingress.id
+}
+
 resource "azurerm_sql_server" "sql" {
   name                         = var.sql_server_name
   resource_group_name          = azurerm_resource_group.rg.name

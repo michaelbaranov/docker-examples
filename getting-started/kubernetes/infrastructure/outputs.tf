@@ -13,3 +13,7 @@ output "publicdns_cd" {
 output "publicdns_cm" {
   value = azurerm_dns_a_record.cm_dns_record.fqdn
 }
+
+output "publicdns_horizon" {
+  value = azurerm_dns_a_record.hrz_dns_record.fqdn
+}

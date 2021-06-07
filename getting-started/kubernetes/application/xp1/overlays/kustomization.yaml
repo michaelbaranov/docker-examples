@@ -60,3 +60,5 @@ resources:
 - ../base/xdbsearchworker.yaml
 patchesStrategicMerge:
 - environment-variables.yaml
+- horizon/patch-cm.yaml
+- horizon/patch-id.yaml
