@@ -99,7 +99,7 @@ jobs:
         inlineScript: |
           kustomize build --load-restrictor LoadRestrictionsNone external | kubectl apply -f -
           do {
-              Sleep -Seconds 10
+              Start-Sleep -Seconds 10
               $solrDeployment = kubectl get deployment solr -o json | ConvertFrom-Json
           } while ($solrDeployment.status.replicas -ne $solrDeployment.status.readyReplicas)
         workingDirectory: getting-started/kubernetes/application/xp1/overlays
@@ -120,7 +120,7 @@ jobs:
         inlineScript: |
           kustomize build --load-restrictor LoadRestrictionsNone init | kubectl apply -f -'
           do {
-            Sleep -Seconds 10
+            Start-Sleep -Seconds 10
             $mssqlinitjob=kubectl get jobs mssql-init -o json | convertfrom-json
             $solrinitjob=kubectl get jobs solr-init -o json | convertfrom-json
           } while($mssqlinitjob.status.active -eq 1 -or $solrinitjob.status.active -eq 1)
