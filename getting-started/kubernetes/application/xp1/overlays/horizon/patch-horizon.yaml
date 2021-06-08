@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hrz
+spec:
+  selector:
+    matchLabels:
+      app: hrz
+  template:
+    metadata:
+      labels:
+        app: hrz
+    spec:
+      nodeSelector:
+        kubernetes.io/os: windows
+      containers:
+      - name: sitecore-horizon
+        env:
+        - name: Sitecore_Sitecore__Authentication__OpenIdConnectOptions__CallbackAuthority
+          value: https://hrz.docker-examples.tk
+        - name: Sitecore_SitecorePlatform__ContentManagementUrl
+          value: https://cm.docker-examples.tk
+        - name: Sitecore_Sitecore__Authentication__OpenIdConnectOptions__Authority
+          value: https://id.docker-examples.tk
+        - name: Sitecore_Sitecore__Authentication__BearerAuthenticationOptions__Authority
+          value: https://id.docker-examples.tk

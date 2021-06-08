@@ -66,3 +66,4 @@ patchesStrategicMerge:
 - environment-variables.yaml
 - horizon/patch-cm.yaml
 - horizon/patch-id.yaml
+- horizon/patch-horizon.yaml
